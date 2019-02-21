@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -13,6 +11,12 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+//Route::get('/','App\Http\Controllers\UserController@index')->middleware(['auth:api']);
+
+Route::post('register');
+Route::post('auth');
+
+Route::middleware(['auth:api'])->group(function (){
+    Route::resource('profile','\App\Http\Controllers\UserController');
+    Route::resource('profile/inventory','\App\Http\Controllers\BookController');
 });
