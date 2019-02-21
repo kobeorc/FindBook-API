@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public function inventory(): BelongsToMany
     {
-        return $this->belongsToMany(Book::class, 'user_have_books');
+        return $this->belongsToMany(Book::class, 'users_have_books');
     }
 
     public function isAdmin()

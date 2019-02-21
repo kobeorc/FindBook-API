@@ -13,10 +13,13 @@
 
 //Route::get('/','App\Http\Controllers\UserController@index')->middleware(['auth:api']);
 
-Route::post('register');
-Route::post('auth');
+//Route::post('register');
+//Route::post('auth');
+//
+//Route::middleware(['auth:api'])->group(function (){
+//    Route::resource('profile','\App\Http\Controllers\UserController');
+//    Route::resource('profile/inventory','\App\Http\Controllers\BookController');
+//});
 
-Route::middleware(['auth:api'])->group(function (){
-    Route::resource('profile','\App\Http\Controllers\UserController');
-    Route::resource('profile/inventory','\App\Http\Controllers\BookController');
-});
+
+Route::get('profile/inventory','api\ProfileController@inventory');

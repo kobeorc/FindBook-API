@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserHaveFavoritesTable extends Migration
+class CreateUsersHaveFavoritesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateUserHaveFavoritesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_have_favorites', function (Blueprint $table) {
+        Schema::create('users_have_favorites', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('book_id');
@@ -31,6 +31,6 @@ class CreateUserHaveFavoritesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_have_favorite');
+        Schema::dropIfExists('users_have_favorite');
     }
 }
