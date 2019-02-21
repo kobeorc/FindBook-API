@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBooksTable extends Migration
+class CreateImageableTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,15 @@ class CreateBooksTable extends Migration
      */
     public function up()
     {
-        Schema::create('books', function (Blueprint $table) {
+        Schema::create('imageables', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->longText('description')->nullable();
-            $table->string('latitude')->nullable();
-            $table->string('longitude')->nullable();
-            $table->integer('year')->nullable();
+            $table->unsignedInteger('image_id');
+            $table->unsignedInteger('imageable_id');
+            $table->string('imageable_type');
             $table->timestamps();
             $table->softDeletes();
+
+            $table->foreign('image_id')->references('id')->on('images');
         });
     }
 
@@ -32,6 +32,6 @@ class CreateBooksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('books');
+        Schema::dropIfExists('imageables');
     }
 }

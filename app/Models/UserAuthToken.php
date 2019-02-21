@@ -7,16 +7,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class UserAuthToken extends Model
 {
-    protected $table = 'user_auth_tokens';
-    public $timestamps = true;
-
-    protected $fillable = [
+    public    $timestamps = true;
+    protected $table      = 'user_auth_tokens';
+    protected $fillable   = [
         'token',
         'refresh_token',
     ];
 
     protected $casts = [
-        'token' => 'string',
+        'token'         => 'string',
         'refresh_token' => 'string',
     ];
 
