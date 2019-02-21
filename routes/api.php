@@ -10,16 +10,17 @@
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('login','api\UserController@login');
 
 //Route::get('/','App\Http\Controllers\UserController@index')->middleware(['auth:api']);
 
 //Route::post('register');
 //Route::post('auth');
 //
-//Route::middleware(['auth:api'])->group(function (){
+Route::middleware(['custom.auth'])->group(function (){
+    Route::get('profile/inventory','api\ProfileController@inventory');
 //    Route::resource('profile','\App\Http\Controllers\UserController');
 //    Route::resource('profile/inventory','\App\Http\Controllers\BookController');
-//});
+});
 
 
-Route::get('profile/inventory','api\ProfileController@inventory');
