@@ -66,6 +66,6 @@ class User extends Authenticatable
 
     public function getAvatarAttribute()
     {
-        return $this->avatar->first()->path ?? '';
+        return $this->avatar()->first()->path ?? '';
     }
 }

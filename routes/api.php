@@ -22,6 +22,8 @@ Route::post('register','api\UserController@register');
 Route::middleware(['custom.auth'])->group(function (){
     Route::get('profile','api\ProfileController@current');
     Route::get('profile/inventory','api\ProfileController@inventory');
+    Route::get('profile/inventory/archive','api\ProfileController@archive');
+    Route::post('profile/inventory/archive','api\ProfileController@putToArchive');
 //    Route::resource('profile','\App\Http\Controllers\UserController');
 //    Route::resource('profile/inventory','\App\Http\Controllers\BookController');
 });
