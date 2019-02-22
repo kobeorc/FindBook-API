@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     const ROLE_ADMIN = 'admin';
     const ROLE_USER = 'user';
+    const STATUS_REGULAR = 'regular';
+    const STATUS_STAR = 'star';
     use Notifiable;
 
     protected $fillable = [
@@ -21,15 +23,20 @@ class User extends Authenticatable
         'role',
     ];
 
-    protected $casts  = [
+    protected $casts = [
         'name'     => 'string',
         'email'    => 'string',
         'password' => 'string',
         'role'     => 'string',
     ];
+
     protected $hidden = [
         'password',
         'remember_token',
+    ];
+
+    protected $appends = [
+        'avatar',
     ];
 
     public function auth_token(): HasMany
@@ -55,5 +62,10 @@ class User extends Authenticatable
     public function avatar(): MorphToMany
     {
         return $this->morphToMany(Image::class, 'imageable');
+    }
+
+    public function getAvatarAttribute()
+    {
+        return $this->avatar->first()->path ?? '';
     }
 }

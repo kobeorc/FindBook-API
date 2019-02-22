@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Auth;
+use App\Http\Middleware\ShouldAcceptJson;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -61,7 +62,10 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+
         'custom.auth' => Auth::class,
+        'should.json' => ShouldAcceptJson::class,
+
     ];
 
     /**

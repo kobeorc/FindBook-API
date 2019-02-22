@@ -24,6 +24,10 @@ class UserAuthToken extends Model
         'updated_at',
     ];
 
+    protected $visible = [
+        'token',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

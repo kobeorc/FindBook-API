@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\api;
 
-abstract class ApiController
+use App\Http\Controllers\Controller;
+
+abstract class ApiController extends Controller
 {
     protected function jsonResponse($data)
     {
-        return json_encode([$data]);
+        return response()->json($data);
     }
 }

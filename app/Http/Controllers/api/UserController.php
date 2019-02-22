@@ -11,8 +11,8 @@ class UserController extends ApiController
     public function login(Request $request)
     {
         $this->validate($request,[
-            'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'exists:users'],
+            'password' => ['required', 'string', 'max:255'],
         ]);
 
         /** @var User $user */
@@ -21,9 +21,30 @@ class UserController extends ApiController
         if(!password_verify($request->get('password'), $user->password))
             abort(403,'Неверный логин/пароль');
 
-        $auth_token = factory(UserAuthToken::class)->create();
+        /** @var UserAuthToken $auth_token */
+        $auth_token = factory(UserAuthToken::class)->make();
         $user->auth_token()->save($auth_token);
 
         return $this->jsonResponse($auth_token);
+    }
+
+    public function register(Request $request)
+    {
+        $this->validate($request,[
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        $user = new User();
+        $user->name = $request->get('name','');
+        $user->email = $request->get('email');
+        $user->password = bcrypt($request->get('password'));
+        $user->role = User::ROLE_USER;
+        $user->status = User::STATUS_REGULAR;
+        $user->setRememberToken(bcrypt(str_random(10)));
+        $user->save();
+
+        return response()->make('',201);
     }
 }
