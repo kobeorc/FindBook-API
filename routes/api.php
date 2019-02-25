@@ -14,18 +14,20 @@
 Route::post('login','api\UserController@login');
 Route::post('register','api\UserController@register');
 
-//Route::get('/','App\Http\Controllers\UserController@index')->middleware(['auth:api']);
-
-//Route::post('register');
-//Route::post('auth');
-//
 Route::middleware(['custom.auth'])->group(function (){
     Route::get('profile','api\ProfileController@current');
+    Route::post('profile','api\ProfileController@updateProfile');//IMAGE
+
     Route::get('profile/inventory','api\ProfileController@inventory');
+    Route::post('profile/inventory','api\ProfileController@putToInventory');//IMAGE
+
     Route::get('profile/inventory/archive','api\ProfileController@archive');
     Route::post('profile/inventory/archive','api\ProfileController@putToArchive');
-//    Route::resource('profile','\App\Http\Controllers\UserController');
-//    Route::resource('profile/inventory','\App\Http\Controllers\BookController');
+    Route::delete('profile/inventory/archive','api\ProfileController@deleteFromArchive');
+
+    Route::get('profile/inventory/favorite','api\ProfileController@getFavorite');
+    Route::post('profile/inventory/favorite','api\ProfileController@putToFavorite');
+    Route::delete('profile/inventory/favorite','api\ProfileController@deleteFromFavorite');
 });
 
 

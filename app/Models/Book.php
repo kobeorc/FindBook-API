@@ -9,6 +9,12 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Book extends Model
 {
+    const DEFAULT_LATITUDE = '0.00';
+    const DEFAULT_LONGITUDE = '0.00';
+
+    const STATUS_ARCHIVED = 'archived';
+    const STATUS_ACTIVE = 'active';
+
     use SoftDeletes;
 
     public $timestamps = true;
@@ -22,6 +28,11 @@ class Book extends Model
         'longitude',
     ];
 
+    protected $appends = [
+        'archived_at',
+        'status',
+    ];
+
     protected $casts = [
         'name'        => 'string',
         'description' => 'string',
@@ -31,6 +42,14 @@ class Book extends Model
 
     protected $hidden = [
         'deleted_at',
+        'pivot',
+        'created_at',
+    ];
+
+    protected $dates = [
+        'deleted_at',
+        'created_at',
+        'updated_at',
     ];
 
     public function images(): MorphToMany
@@ -40,7 +59,7 @@ class Book extends Model
 
     public function creators(): BelongsToMany
     {
-        return $this->belongsToMany(Creator::class,'books_have_creators');
+        return $this->belongsToMany(Creator::class, 'books_have_creators');
     }
 
     public function categories(): belongsToMany
@@ -50,6 +69,17 @@ class Book extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class,'users_have_books');
+        return $this->belongsToMany(User::class, 'users_have_books')->withPivot('archived_at');
     }
+
+    public function getArchivedAtAttribute()
+    {
+        return $this->pivot->archived_at ?? false;
+    }
+
+    public function getStatusAttribute()
+    {
+        return $this->archived_at ? self::STATUS_ARCHIVED : self::STATUS_ACTIVE;
+    }
+
 }

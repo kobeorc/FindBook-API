@@ -46,7 +46,17 @@ class User extends Authenticatable
 
     public function inventory(): BelongsToMany
     {
-        return $this->belongsToMany(Book::class, 'users_have_books');
+        return $this->belongsToMany(Book::class, 'users_have_books')->withPivot(['archived_at']);
+    }
+
+    public function avatar(): MorphToMany
+    {
+        return $this->morphToMany(Image::class, 'imageable');
+    }
+
+    public function favorite()
+    {
+        return $this->belongsToMany(Book::class,'users_have_favorites');
     }
 
     public function isAdmin()
@@ -59,13 +69,8 @@ class User extends Authenticatable
         return $this->role === self::ROLE_USER;
     }
 
-    public function avatar(): MorphToMany
-    {
-        return $this->morphToMany(Image::class, 'imageable');
-    }
-
     public function getAvatarAttribute()
     {
-        return $this->avatar()->first()->path ?? '';
+        return asset($this->avatar()->orderByDesc('id')->first()->path) ?? '';
     }
 }
