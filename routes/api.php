@@ -28,4 +28,6 @@ Route::middleware(['custom.auth'])->group(function (){
     Route::get('profile/inventory/favorite','api\ProfileController@getFavorite');
     Route::post('profile/inventory/favorite','api\ProfileController@putToFavorite');
     Route::delete('profile/inventory/favorite/{bookId}','api\ProfileController@deleteFromFavorite')->where(['bookId'=>'[0-9]+']);
+
+    Route::get('categories','api\CategoryController@index');
 });

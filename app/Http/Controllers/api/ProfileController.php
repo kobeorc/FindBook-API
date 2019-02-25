@@ -104,6 +104,8 @@ class ProfileController extends ApiController
 
         $publisherFullName = $request->get('publisher_full_name');
 
+        $categoryId = $request->get('category_id');
+
         if ($bookId) {
             $book = Book::findOrFail($bookId);
             $book->name = $bookName ?? $book->name;
@@ -146,7 +148,6 @@ class ProfileController extends ApiController
             }
         }
 
-        $a = 1;
         if ($authorFirstName
             || $authorSecondName
             || $authorMiddleName
@@ -184,6 +185,9 @@ class ProfileController extends ApiController
             $book->creators()->attach($publisher);
         }
 
+        if ($categoryId) {
+            $book->categories()->attach($categoryId);
+        }
 
         return response('', 201);
     }

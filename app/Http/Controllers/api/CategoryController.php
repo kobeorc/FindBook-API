@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\api;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\Category;
 
-class CategoryController extends Controller
+class  CategoryController extends ApiController
 {
-    //
+    public function index()
+    {
+        $categories = Category::get();
+        return $this->jsonResponse($categories);
+    }
 }
