@@ -15,7 +15,8 @@ class Image extends Model
 
     protected $hidden = [
         'updated_at',
-        'created_at'
+        'created_at',
+        'pivot',
     ];
 
     public function user(): MorphToMany
@@ -26,5 +27,10 @@ class Image extends Model
     public function books(): MorphToMany
     {
         return $this->morphedByMany(Book::class, 'imageable');
+    }
+
+    public function getPathAttribute()
+    {
+        return asset($this->attributes['path']) ?? '';
     }
 }

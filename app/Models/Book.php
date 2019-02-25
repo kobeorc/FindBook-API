@@ -31,6 +31,7 @@ class Book extends Model
     protected $appends = [
         'archived_at',
         'status',
+        'images'
     ];
 
     protected $casts = [
@@ -80,6 +81,11 @@ class Book extends Model
     public function getStatusAttribute()
     {
         return $this->archived_at ? self::STATUS_ARCHIVED : self::STATUS_ACTIVE;
+    }
+
+    public function getImagesAttribute()
+    {
+        return $this->images()->get() ?? [];
     }
 
 }

@@ -23,11 +23,9 @@ Route::middleware(['custom.auth'])->group(function (){
 
     Route::get('profile/inventory/archive','api\ProfileController@archive');
     Route::post('profile/inventory/archive','api\ProfileController@putToArchive');
-    Route::delete('profile/inventory/archive','api\ProfileController@deleteFromArchive');
+    Route::delete('profile/inventory/archive/{bookId}','api\ProfileController@deleteFromArchive')->where(['bookId'=>'[0-9]+']);
 
     Route::get('profile/inventory/favorite','api\ProfileController@getFavorite');
     Route::post('profile/inventory/favorite','api\ProfileController@putToFavorite');
-    Route::delete('profile/inventory/favorite','api\ProfileController@deleteFromFavorite');
+    Route::delete('profile/inventory/favorite/{bookId}','api\ProfileController@deleteFromFavorite')->where(['bookId'=>'[0-9]+']);
 });
-
-
