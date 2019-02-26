@@ -246,4 +246,16 @@ class ProfileController extends ApiController
 
         return response()->make('', 200);
     }
+
+    public function inventoryBook(Request $request, $bookId)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+
+        $book = $user->inventory()->whereBookId($bookId)->first();
+
+        abort_unless($book,404,'Нет книги в инвентаре');
+
+        return $this->jsonResponse($book);
+    }
 }

@@ -19,6 +19,7 @@ Route::middleware(['custom.auth'])->group(function (){
     Route::post('profile','api\ProfileController@updateProfile');//IMAGE
 
     Route::get('profile/inventory','api\ProfileController@inventory');
+    Route::get('profile/inventory/{bookId}','api\ProfileController@inventoryBook')->where(['bookId'=>'[0-9]']);
     Route::post('profile/inventory','api\ProfileController@putToInventory');//IMAGE
 
     Route::get('profile/inventory/archive','api\ProfileController@archive');
