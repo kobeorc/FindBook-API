@@ -12,5 +12,5 @@
 */
 
 Route::get('/', function () {
-    abort(404);
+    print 'FindBook API';
 });
