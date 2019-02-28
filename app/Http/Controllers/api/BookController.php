@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers\api;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Models\Book;
+use Illuminate\Support\Facades\Auth;
 
-class BookController extends Controller
+class BookController extends ApiController
 {
-    //
+    public function index()
+    {
+        abort_unless(Auth::check(),403,'Требуется авторизация');
+        $books = Book::isActive()->get();
+
+        return $this->jsonResponse($books);
+    }
 }

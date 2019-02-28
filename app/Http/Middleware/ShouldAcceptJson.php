@@ -16,7 +16,7 @@ class ShouldAcceptJson
      */
     public function handle(Request $request, Closure $next)
     {
-        abort_unless($request->acceptsJson(), 403);
+        abort_unless($request->wantsJson(), 403);
         return $next($request);
     }
 }

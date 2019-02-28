@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
@@ -53,11 +54,6 @@ class Book extends Model
         'updated_at',
     ];
 
-    public function images(): MorphToMany
-    {
-        return $this->morphToMany(Image::class, 'imageable');
-    }
-
     public function creators(): BelongsToMany
     {
         return $this->belongsToMany(Creator::class, 'books_have_creators');
@@ -66,11 +62,6 @@ class Book extends Model
     public function categories(): belongsToMany
     {
         return $this->belongsToMany(Category::class, 'books_have_categories');
-    }
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'users_have_books')->withPivot('archived_at');
     }
 
     public function getArchivedAtAttribute()
@@ -87,5 +78,36 @@ class Book extends Model
     {
         return $this->images()->get() ?? [];
     }
+
+    public function images(): MorphToMany
+    {
+        return $this->morphToMany(Image::class, 'imageable');
+    }
+
+    public function scopeIsArchived(Builder $query)
+    {
+        $pivot = $this->users()->getTable();
+
+        return $query->whereHas('users', function ($q) use ($pivot) {
+            $q->whereNotNull("{$pivot}.archived_at");
+        });
+    }
+
+    public function scopeIsActive(Builder $query)
+    {
+
+        $pivot = $this->users()->getTable();
+
+        return $query->whereHas('users', function ($q) use ($pivot) {
+            $q->whereNull("{$pivot}.archived_at");
+        });
+
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'users_have_books')->withPivot('archived_at');
+    }
+
 
 }

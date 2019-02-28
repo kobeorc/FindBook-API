@@ -15,6 +15,7 @@ Route::post('login','api\UserController@login');
 Route::post('register','api\UserController@register');
 
 Route::middleware(['custom.auth'])->group(function (){
+    Route::get('books','api\BookController@index');
     Route::get('profile','api\ProfileController@current');
     Route::post('profile','api\ProfileController@updateProfile');//IMAGE
 
