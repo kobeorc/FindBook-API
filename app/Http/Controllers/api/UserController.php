@@ -19,7 +19,7 @@ class UserController extends ApiController
         /** @var User $user */
         $user = User::query()->whereEmail($request->get('email'))->first();
 
-        if(Hash::check($request->get('password'), $user->password))
+        if(!Hash::check($request->get('password'), $user->password))
             abort(403,'Неверный логин/пароль');
 
         /** @var UserAuthToken $auth_token */
@@ -40,7 +40,7 @@ class UserController extends ApiController
         $user = new User();
         $user->name = $request->get('name','');
         $user->email = $request->get('email');
-        $user->password = bcrypt($request->get('password'));
+        $user->password = Hash::make($request->get('password'));
         $user->role = User::ROLE_USER;
         $user->status = User::STATUS_REGULAR;
         $user->setRememberToken(bcrypt(str_random(10)));
