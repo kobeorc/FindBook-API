@@ -15,9 +15,6 @@ class CreateCreatorsTable extends Migration
     {
         Schema::create('creators', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('middle_name')->nullable();
             $table->string('full_name')->nullable();
             $table->enum('type', ['author', 'publisher']);
             $table->timestamps();

@@ -14,14 +14,13 @@ class Creator extends Model
     public    $timestamps = true;
     protected $table      = 'creators';
     protected $fillable   = [
-        'first_name',
-        'last_name',
-        'middle_name',
+        'full_name',
         'type',
     ];
     protected $hidden     = [
         'updated_at',
         'created_at',
+        'deleted_at',
     ];
 
     public function books()

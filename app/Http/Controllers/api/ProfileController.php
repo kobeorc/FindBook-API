@@ -53,6 +53,9 @@ class ProfileController extends ApiController
 
     public function putToFavorite(Request $request)
     {
+        $this->validate($request, [
+            'book_id' => 'required|exists:books.id'
+        ]);
         /** @var User $user */
         $user = Auth::user();
 
@@ -88,6 +91,16 @@ class ProfileController extends ApiController
 
     public function putToInventory(Request $request)
     {
+        $this->validate($request, [
+            'book_id'             => 'sometimes|exists:books.id',
+            'book_name'           => 'sometimes|string',
+            'book_description'    => 'sometimes|string',
+            'year'                => 'sometimes|integer',
+            'author_full_name'    => 'sometimes|array',
+            'author_full_name.*'  => 'sometimes|string',
+            'publisher_full_name' => 'sometimes|string',
+            'category_id'         => 'sometimes|exists:categories.id'
+        ]);
         /** @var User $user */
         $user = Auth::user();
 
@@ -98,10 +111,7 @@ class ProfileController extends ApiController
         $bookLatitude = $request->get('latitude');
         $bookLongitude = $request->get('longitude');
 
-        $authorFirstName = $request->get('author_first_name');
-        $authorSecondName = $request->get('author_second_name');
-        $authorMiddleName = $request->get('author_middle_name');
-
+        $authorFullNames = $request->get('author_full_name');
         $publisherFullName = $request->get('publisher_full_name');
 
         $categoryId = $request->get('category_id');
@@ -148,28 +158,23 @@ class ProfileController extends ApiController
             }
         }
 
-        if ($authorFirstName
-            || $authorSecondName
-            || $authorMiddleName
-        ) {
-            $author = Creator::query()
-                             ->whereType(Creator::TYPE_AUTHOR)
-                             ->whereFirstName($authorFirstName)
-                             ->whereSecondName($authorSecondName)
-                             ->whereMiddleName($authorMiddleName)
-                             ->first();
+        if (!empty($authorFullNames)) {
+            $authorId = [];
+            foreach ($authorFullNames as $authorFullName) {
+                $author = Creator::query()
+                                 ->whereType(Creator::TYPE_AUTHOR)
+                                 ->whereFullName($authorFullName)
+                                 ->first();
 
-            if (!$author->exists()) {
-                $author = new Creator();
-                $author->type = Creator::TYPE_AUTHOR;
-                $author->first_name = $authorFirstName;
-                $author->second_name = $authorSecondName;
-                $author->middle_name = $authorMiddleName;
-                $author->full_name = $authorSecondName . ' ' . $authorFirstName . ' ' . $authorMiddleName;
-                $author->save();
+                if (!$author->exists()) {
+                    $author = new Creator();
+                    $author->type = Creator::TYPE_AUTHOR;
+                    $author->full_name = $authorFullName;
+                    $author->save();
+                }
+                $authorId[] = $author->id;
             }
-
-            $book->creators()->attach($author);
+            $book->creators()->sync($authorId);
         }
 
         if ($publisherFullName) {
@@ -254,7 +259,7 @@ class ProfileController extends ApiController
 
         $book = $user->inventory()->whereBookId($bookId)->first();
 
-        abort_unless($book,404,'Нет книги в инвентаре');
+        abort_unless($book, 404, 'Нет книги в инвентаре');
 
         return $this->jsonResponse($book);
     }

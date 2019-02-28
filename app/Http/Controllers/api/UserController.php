@@ -38,7 +38,7 @@ class UserController extends ApiController
         ]);
 
         $user = new User();
-        $user->name = $request->get('name','');
+        $user->name = $request->get('name');
         $user->email = $request->get('email');
         $user->password = Hash::make($request->get('password'));
         $user->role = User::ROLE_USER;
@@ -47,5 +47,23 @@ class UserController extends ApiController
         $user->save();
 
         return response()->make('',201);
+    }
+
+    public function registerGuest(Request $request)
+    {
+        $user = new User();
+        $user->name = 'guest';
+        $user->role = User::ROLE_USER;
+        $user->status = User::STATUS_REGULAR;
+        $user->password = Hash::make(str_random(10));
+        $user->setRememberToken(Hash::make(str_random(10)));
+        $user->save();
+
+        /** @var UserAuthToken $auth_token */
+        $auth_token = factory(UserAuthToken::class)->make();
+        $user->auth_token()->save($auth_token);
+
+        return $this->jsonResponse($auth_token);
+
     }
 }

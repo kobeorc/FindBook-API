@@ -71,6 +71,6 @@ class User extends Authenticatable
 
     public function getAvatarAttribute()
     {
-        return $this->avatar()->exists() ? asset($this->avatar()->orderByDesc('id')->first()->path) : '';
+        return $this->avatar()->exists() ? asset($this->avatar()->orderByDesc('id')->first()->path) : null;
     }
 }
