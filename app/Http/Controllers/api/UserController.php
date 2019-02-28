@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api;
 use App\Models\User;
 use App\Models\UserAuthToken;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends ApiController
 {
@@ -18,7 +19,7 @@ class UserController extends ApiController
         /** @var User $user */
         $user = User::query()->whereEmail($request->get('email'))->first();
 
-        if(!password_verify($request->get('password'), $user->password))
+        if(Hash::check($request->get('password'), $user->password))
             abort(403,'Неверный логин/пароль');
 
         /** @var UserAuthToken $auth_token */
