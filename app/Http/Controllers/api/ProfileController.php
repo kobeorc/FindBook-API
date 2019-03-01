@@ -99,7 +99,9 @@ class ProfileController extends ApiController
             'author_full_name'    => 'sometimes|array',
             'author_full_name.*'  => 'sometimes|string',
             'publisher_full_name' => 'sometimes|string',
-            'category_id'         => 'sometimes|exists:categories.id'
+            'category_id'         => 'sometimes|exists:categories.id',
+            'images'              => 'sometimes|array',
+            'images.*'            => 'sometimes|image',
         ]);
         /** @var User $user */
         $user = Auth::user();
