@@ -17,6 +17,12 @@ Routes:
 
   Только с авторизацией:
   
+    GET: books
+    Возвращает список всех книг  
+    
+    GET: books/{bookId}
+    Возвращает книгу по id
+    
     GET: profile
     Вернет текущего пользователя
 
@@ -31,6 +37,9 @@ Routes:
     Params: book_id(если обновление книги), book_name, book_description, year, latitude, longitude, author_full_name[](всегда массив), publisher_full_name, category_id, images[](file передаваемый всегда массивом?)
     Добавление книги и обновление. Автор пока 1, картинки только добавляются
 
+    DELETE: profile/inventory/{bookId}
+    Удаляет книгу
+    
     GET: profile/inventory/archive
     Возвращает список книг в архиве
 
@@ -56,3 +65,9 @@ Routes:
     
     GET: publishers
     Возвращает список издательств
+    
+    GET: search
+    Params: search (больше 3 символов)
+    Возвращает список книг. 
+    Поиск сейчас по books.name|books.description|authors.full_name|publishers.full_name
+    

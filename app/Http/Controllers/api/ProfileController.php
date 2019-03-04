@@ -17,7 +17,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNull('archived_at')->get();
+        $books = $user->inventory()->whereNull('archived_at')->with(['authors','publishers','categories','users'])->get();
         return $this->jsonResponse($books);
     }
 
@@ -33,7 +33,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNotNull('archived_at')->get();
+        $books = $user->inventory()->whereNotNull('archived_at')->with(['authors','publishers','categories','users'])->get();
 
         return $this->jsonResponse($books);
     }
@@ -72,7 +72,7 @@ class ProfileController extends ApiController
         /** @var User $user */
         $user = Auth::user();
 
-        $favorites = $user->favorite()->get();
+        $favorites = $user->favorite()->with(['authors','publishers','categories','users'])->get();
 
         return $this->jsonResponse($favorites);
     }
@@ -254,15 +254,19 @@ class ProfileController extends ApiController
         return response()->make('', 200);
     }
 
-    public function inventoryBook(Request $request, $bookId)
+    public function deleteFromInventory(Request $request,$bookId)
     {
         /** @var User $user */
         $user = Auth::user();
+        /** @var Book $book */
+        $book = $user->inventory()->whereBookId($bookId);
+        abort_unless($book->exists(), 404, 'У пользователя нет этой книги');
 
-        $book = $user->inventory()->whereBookId($bookId)->first();
+        Book::find($bookId)->delete();
 
-        abort_unless($book, 404, 'Нет книги в инвентаре');
-
-        return $this->jsonResponse($book);
+        return response('',204);
     }
+
+
+
 }

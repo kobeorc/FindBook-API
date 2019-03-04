@@ -59,6 +59,16 @@ class Book extends Model
         return $this->belongsToMany(Creator::class, 'books_have_creators');
     }
 
+    public function authors()
+    {
+        return $this->creators()->whereType(Creator::TYPE_AUTHOR);
+    }
+
+    public function publishers()
+    {
+        return $this->creators()->whereType(Creator::TYPE_PUBLISHER);
+    }
+
     public function categories(): belongsToMany
     {
         return $this->belongsToMany(Category::class, 'books_have_categories');
