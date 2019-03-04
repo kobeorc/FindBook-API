@@ -15,7 +15,7 @@ class SearchController extends ApiController
 
         $string = $request->get('search');
 
-        $result = Book::where('name', 'like', '%' . $string . '%')
+        $query = Book::where('name', 'like', '%' . $string . '%')
                       ->orWhere('description', 'like', '%' . $string . '%')
                       ->orWhereHas('authors', function ($query) use ($string) {
                           $query->where('full_name', 'like', '%' . $string . '%');
@@ -23,10 +23,9 @@ class SearchController extends ApiController
                       ->orWhereHas('publishers', function ($query) use ($string) {
                           $query->where('full_name', 'like', '%' . $string . '%');
                       })
-                      ->with(['authors', 'publishers', 'categories', 'users'])
-                      ->get();
+                      ->with(['authors', 'publishers', 'categories', 'users']);
 
-        return $this->jsonResponse($result);
+        return $this->jsonPaginateResponse($query);
 
     }
 }

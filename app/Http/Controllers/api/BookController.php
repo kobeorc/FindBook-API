@@ -40,10 +40,7 @@ class BookController extends ApiController
             });
         }
 
-
-        $books = $query->get();
-
-        return $this->jsonResponse($books);
+        return $this->jsonPaginateResponse($query);
     }
 
     public function show(Request $request, $bookId)
