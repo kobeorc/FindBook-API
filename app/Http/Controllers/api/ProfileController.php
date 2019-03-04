@@ -227,22 +227,24 @@ class ProfileController extends ApiController
         $fileAvatar = $request->file('avatar');
         $password = $request->get('password');
 
-        $userAvatar = '/avatar/' . str_random() . '.' . $fileAvatar->getClientOriginalExtension();
-        /** @var \Intervention\Image\Image $img */
-        $this->uploadImage($fileAvatar, $userAvatar);
+        if($fileAvatar){
+            $userAvatar = '/avatar/' . str_random() . '.' . $fileAvatar->getClientOriginalExtension();
+            /** @var \Intervention\Image\Image $img */
+            $this->uploadImage($fileAvatar, $userAvatar);
 
-        $image = \App\Models\Image::create([
-            'path' => '/images' . $userAvatar,
-        ]);
+            $image = \App\Models\Image::create([
+                'path' => '/images' . $userAvatar,
+            ]);
+            $user->avatar()->attach($image);
+        }
 
-        $user->avatar()->attach($image);
 
         $user->name = $userName ?? $user->name;
         $user->email = $userEmail ?? $user->email;
         $user->password = $password ?? $user->password;
         $user->save();
 
-        return response('', 200);
+        return $this->jsonResponse($user);
     }
 
     public function deleteFromArchive(Request $request, $bookId)
