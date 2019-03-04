@@ -28,7 +28,7 @@ Routes:
     Вернет текущего пользователя
 
     POST: profile
-    Params: avatar(file),email,name
+    Params: avatar (file),email,name,password,password_confirmation
     Обновление данных пользователя
 
     GET: profile/inventory

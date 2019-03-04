@@ -17,7 +17,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNull('archived_at')->with(['authors','publishers','categories','users'])->get();
+        $books = $user->inventory()->whereNull('archived_at')->with(['authors', 'publishers', 'categories', 'users'])->get();
         return $this->jsonResponse($books);
     }
 
@@ -33,7 +33,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNotNull('archived_at')->with(['authors','publishers','categories','users'])->get();
+        $books = $user->inventory()->whereNotNull('archived_at')->with(['authors', 'publishers', 'categories', 'users'])->get();
 
         return $this->jsonResponse($books);
     }
@@ -72,7 +72,7 @@ class ProfileController extends ApiController
         /** @var User $user */
         $user = Auth::user();
 
-        $favorites = $user->favorite()->with(['authors','publishers','categories','users'])->get();
+        $favorites = $user->favorite()->with(['authors', 'publishers', 'categories', 'users'])->get();
 
         return $this->jsonResponse($favorites);
     }
@@ -214,9 +214,10 @@ class ProfileController extends ApiController
     public function updateProfile(Request $request)
     {
         $this->validate($request, [
-            'avatar' => 'image|mimes:jpeg,jpg,png,gif',
-            'name'   => 'sometimes|string',
-            'email'  => 'sometimes|email|unique:users',
+            'avatar'   => 'image|mimes:jpeg,jpg,png,gif',
+            'name'     => 'sometimes|string|max:255',
+            'email'    => 'sometimes|email|unique:users|max:255',
+            'password' => 'sometimes|min:6|confirmed|string',
         ]);
 
         /** @var User $user */
@@ -224,6 +225,7 @@ class ProfileController extends ApiController
         $userName = $request->get('name');
         $userEmail = $request->get('email');
         $fileAvatar = $request->file('avatar');
+        $password = $request->get('password');
 
         $userAvatar = '/avatar/' . str_random() . '.' . $fileAvatar->getClientOriginalExtension();
         /** @var \Intervention\Image\Image $img */
@@ -237,6 +239,7 @@ class ProfileController extends ApiController
 
         $user->name = $userName ?? $user->name;
         $user->email = $userEmail ?? $user->email;
+        $user->password = $password ?? $user->password;
         $user->save();
 
         return response('', 200);
@@ -254,7 +257,7 @@ class ProfileController extends ApiController
         return response()->make('', 200);
     }
 
-    public function deleteFromInventory(Request $request,$bookId)
+    public function deleteFromInventory(Request $request, $bookId)
     {
         /** @var User $user */
         $user = Auth::user();
@@ -264,9 +267,8 @@ class ProfileController extends ApiController
 
         Book::find($bookId)->delete();
 
-        return response('',204);
+        return response('', 204);
     }
-
 
 
 }
