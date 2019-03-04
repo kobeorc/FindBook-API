@@ -54,7 +54,7 @@ class ProfileController extends ApiController
     public function putToFavorite(Request $request)
     {
         $this->validate($request, [
-            'book_id' => 'required|exists:books.id'
+            'book_id' => 'required|exists:books,id'
         ]);
         /** @var User $user */
         $user = Auth::user();
@@ -92,14 +92,14 @@ class ProfileController extends ApiController
     public function putToInventory(Request $request)
     {
         $this->validate($request, [
-            'book_id'             => 'sometimes|exists:books.id',
+            'book_id'             => 'sometimes|exists:books,id',
             'book_name'           => 'sometimes|string',
             'book_description'    => 'sometimes|string',
             'year'                => 'sometimes|integer',
             'author_full_name'    => 'sometimes|array',
             'author_full_name.*'  => 'sometimes|string',
             'publisher_full_name' => 'sometimes|string',
-            'category_id'         => 'sometimes|exists:categories.id',
+            'category_id'         => 'sometimes|exists:categories,id',
             'images'              => 'sometimes|array',
             'images.*'            => 'sometimes|image',
         ]);
