@@ -18,6 +18,7 @@ Routes:
   Только с авторизацией:
   
     GET: books
+    Params: categoriesIds (array), publishersIds (array), authorsIds (array). Необязательные параметры для фильтрации
     Возвращает список всех книг  
     
     GET: books/{bookId}
