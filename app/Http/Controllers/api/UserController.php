@@ -11,16 +11,17 @@ class UserController extends ApiController
 {
     public function login(Request $request)
     {
-        $this->validate($request,[
-            'email' => ['required', 'string', 'email', 'max:255', 'exists:users'],
-            'password' => ['required', 'string', 'max:255'],
+        $this->validate($request, [
+            'email'    => 'required|string|email|max:255|exists:users',
+            'password' => 'required|string|max:255',
         ]);
 
         /** @var User $user */
         $user = User::query()->whereEmail($request->get('email'))->first();
 
-        if(!Hash::check($request->get('password'), $user->password))
-            abort(403,'Неверный логин/пароль');
+        if (!Hash::check($request->get('password'), $user->password)) {
+            abort(403, 'Неверный логин/пароль');
+        }
 
         /** @var UserAuthToken $auth_token */
         $auth_token = factory(UserAuthToken::class)->make();
@@ -31,10 +32,10 @@ class UserController extends ApiController
 
     public function register(Request $request)
     {
-        $this->validate($request,[
-            'name' => ['required|string|max:255'],
-            'email' => ['required|string|email|max:255|unique:users'],
-            'password' => ['required|string|min:6|confirmed'],
+        $this->validate($request, [
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
         $user = new User();
@@ -46,7 +47,7 @@ class UserController extends ApiController
         $user->setRememberToken(bcrypt(str_random(10)));
         $user->save();
 
-        return response()->make('',201);
+        return response()->make('', 201);
     }
 
     public function registerGuest(Request $request)
