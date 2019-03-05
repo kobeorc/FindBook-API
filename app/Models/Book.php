@@ -32,7 +32,7 @@ class Book extends Model
     protected $appends = [
         'archived_at',
         'status',
-        'images'
+        'images',
     ];
 
     protected $casts = [
@@ -54,6 +54,8 @@ class Book extends Model
         'updated_at',
     ];
 
+    /** Relations */
+
     public function creators(): BelongsToMany
     {
         return $this->belongsToMany(Creator::class, 'books_have_creators');
@@ -74,6 +76,23 @@ class Book extends Model
         return $this->belongsToMany(Category::class, 'books_have_categories');
     }
 
+    public function images(): MorphToMany
+    {
+        return $this->morphToMany(Image::class, 'imageable');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'users_have_books')->withPivot('archived_at');
+    }
+
+    public function favorite()
+    {
+        return $this->belongsToMany(User::class, 'users_have_books');
+    }
+
+    /** Mutators */
+
     public function getArchivedAtAttribute()
     {
         return $this->pivot->archived_at ?? false;
@@ -89,11 +108,12 @@ class Book extends Model
         return $this->images()->get() ?? [];
     }
 
-    public function images(): MorphToMany
-    {
-        return $this->morphToMany(Image::class, 'imageable');
-    }
+    /** Scopes */
 
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
     public function scopeIsArchived(Builder $query)
     {
         $pivot = $this->users()->getTable();
@@ -103,21 +123,16 @@ class Book extends Model
         });
     }
 
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
     public function scopeIsActive(Builder $query)
     {
-
         $pivot = $this->users()->getTable();
 
         return $query->whereHas('users', function ($q) use ($pivot) {
             $q->whereNull("{$pivot}.archived_at");
         });
-
     }
-
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'users_have_books')->withPivot('archived_at');
-    }
-
-
 }
