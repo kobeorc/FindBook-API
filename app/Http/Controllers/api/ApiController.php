@@ -17,8 +17,13 @@ abstract class ApiController extends Controller
         $offset = request()->get('offset');
         $limit = request()->get('limit');
 
-        $result = $data->limit($limit)->offset($offset)->get();
+        if($offset)
+            $data->offset($offset);
 
-        return response()->json($result);
+        if($limit)
+            $data->limit($limit);
+
+
+        return response()->json($data->get());
     }
 }
