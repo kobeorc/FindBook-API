@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     const ROLE_ADMIN = 'admin';
     const ROLE_USER = 'user';
+    const ROLE_GUEST = 'guest';
+
     const STATUS_REGULAR = 'regular';
     const STATUS_STAR = 'star';
     use Notifiable;

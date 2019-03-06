@@ -54,7 +54,7 @@ class UserController extends ApiController
     {
         $user = new User();
         $user->name = 'guest';
-        $user->role = User::ROLE_USER;
+        $user->role = User::ROLE_GUEST;
         $user->status = User::STATUS_REGULAR;
         $user->password = Hash::make(str_random(10));
         $user->setRememberToken(Hash::make(str_random(10)));
