@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class Book extends Model
 {
@@ -33,6 +34,7 @@ class Book extends Model
         'archived_at',
         'status',
         'images',
+        'is_favorite',
     ];
 
     protected $casts = [
@@ -88,7 +90,7 @@ class Book extends Model
 
     public function favorite()
     {
-        return $this->belongsToMany(User::class, 'users_have_books');
+        return $this->belongsToMany(User::class, 'users_have_favorites');
     }
 
     /** Mutators */
@@ -106,6 +108,11 @@ class Book extends Model
     public function getImagesAttribute()
     {
         return $this->images()->get() ?? [];
+    }
+
+    public function getIsFavoriteAttribute()
+    {
+        return $this->favorite()->exists();
     }
 
     /** Scopes */

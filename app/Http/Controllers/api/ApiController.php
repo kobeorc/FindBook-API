@@ -23,7 +23,6 @@ abstract class ApiController extends Controller
         if($limit)
             $data->limit($limit);
 
-
         return response()->json($data->get());
     }
 }
