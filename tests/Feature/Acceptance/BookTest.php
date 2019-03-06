@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Acceptance;
+namespace Tests\Feature\Acceptance;
 
 use Illuminate\Support\Str;
 
@@ -15,36 +15,35 @@ class BookTest extends TestCase
 
     public function testBooks_success()
     {
-        $request = $this->get('books', $this->header);
-        $request->assertStatus(200);
+        $response = $this->get('api/books', $this->header);
+        $response->assertStatus(200);
     }
 
     public function testBookById_success()
     {
-        $request = $this->get('books', $this->header);
-        $collection = $request->decodeResponseJson();
-        $bookId = $collection->first()->value('id');
-        $request = $this->get('books/' . $bookId, $this->header);
-        $request->assertStatus(200);
-
+        $responseId = $this->get('api/books', $this->header);
+        $collection = $responseId->decodeResponseJson();
+        $bookId = $collection[0]['id'];
+        $response = $this->get('api/books/' . $bookId, $this->header);
+        $response->assertStatus(200);
     }
 
     public function testPublishers_success()
     {
-        $request = $this->get('publishers', $this->header);
+        $request = $this->get('api/publishers', $this->header);
         $request->assertStatus(200);
     }
 
     public function testCategories_success()
     {
-        $request = $this->get('categories', $this->header);
+        $request = $this->get('api/categories', $this->header);
         $request->assertStatus(200);
     }
 
     public function testSearch_success()
     {
         $searchString = Str::random(rand(3, 8));
-        $request = $this->get('search?search=' . $searchString, $this->header);
+        $request = $this->get('api/search?search=' . $searchString, $this->header);
         $request->assertStatus(200);
     }
 }

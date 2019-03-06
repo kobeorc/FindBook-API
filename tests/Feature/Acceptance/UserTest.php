@@ -1,6 +1,7 @@
 <?php
 
-namespace Tests\Acceptance;
+namespace Tests\Feature\Acceptance;
+
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -14,7 +15,7 @@ class UserTest extends TestCase
      */
     public function testRegister_success()
     {
-        $request = $this->post('/register', ['email' => $this->email, 'password' => $this->password, 'password_confirmation' => $this->password, 'name' => 'Joe']);
+        $request = $this->post('api/register', ['email' => $this->email, 'password' => $this->password, 'password_confirmation' => $this->password, 'name' => 'Joe'], ['Accept' => 'application/json']);
         $request->assertStatus(201);
         $this->assertDatabaseHas('users', ['email' => $this->email]);
 
@@ -22,14 +23,14 @@ class UserTest extends TestCase
 
     public function testRegisterSilent_success()
     {
-        $request = $this->post('register/silent');
+        $request = $this->post('api/register/silent', [], ['Accept' => 'application/json']);
         $request->assertStatus(200);
         $request->assertJsonStructure(['token']);
     }
 
     public function tetLogin_success()
     {
-        $request = $this->post('login', ['email' => $this->email, 'password' => $this->password]);
+        $request = $this->post('api/login', ['email' => $this->email, 'password' => $this->password], ['Accept' => 'application/json']);
         $request->assertStatus(200);
     }
 }

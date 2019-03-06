@@ -1,6 +1,7 @@
 <?php
 
-namespace Tests\Acceptance;
+namespace Tests\Feature\Acceptance;
+
 
 abstract class TestCase extends \Tests\TestCase
 {
@@ -19,11 +20,10 @@ abstract class TestCase extends \Tests\TestCase
         $this->email = 'test@mail.ru';
         $this->password = '123456';
 
-        if($auth)
-        {
-            $request = $this->post('login',['email'=>'admin@findbook.info','password'=>'password1234567']);
-            $this->token = $request->decodeResponseJson('token');
-            $this->header = ['Authorization' => 'Bearer ' . $this->token];
+        if ($auth) {
+            $response = $this->post('api/login', ['email' => 'admin@findbook.info', 'password' => 'password123456'], ['Accept' => 'application/json']);
+            $this->token = $response->decodeResponseJson('token');
+            $this->header = ['Authorization' => 'Bearer ' . $this->token, 'Accept' => 'application/json'];
         }
     }
 }
