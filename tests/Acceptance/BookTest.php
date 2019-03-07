@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 class BookTest extends TestCase
 {
 
-    public function setUp($auth = false)
+    public function setUp($auth = false): void
     {
         parent::setUp(true);
     }

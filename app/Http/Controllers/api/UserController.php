@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserAuthToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UserController extends ApiController
 {
@@ -44,7 +45,7 @@ class UserController extends ApiController
         $user->password = Hash::make($request->get('password'));
         $user->role = User::ROLE_USER;
         $user->status = User::STATUS_REGULAR;
-        $user->setRememberToken(bcrypt(str_random(10)));
+        $user->setRememberToken(bcrypt(Str::random()));
         $user->save();
 
         return response()->make('', 201);
@@ -56,8 +57,8 @@ class UserController extends ApiController
         $user->name = 'guest';
         $user->role = User::ROLE_GUEST;
         $user->status = User::STATUS_REGULAR;
-        $user->password = Hash::make(str_random(10));
-        $user->setRememberToken(Hash::make(str_random(10)));
+        $user->password = Hash::make(Str::random());
+        $user->setRememberToken(Hash::make(Str::random()));
         $user->save();
 
         /** @var UserAuthToken $auth_token */

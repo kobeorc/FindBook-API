@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
 
 class ProfileController extends ApiController
@@ -141,7 +142,7 @@ class ProfileController extends ApiController
         $images = $request->file('images');
 
         if ($images instanceof UploadedFile) {
-            $origName = '/books/' . $book->id . '/' . str_random() . '.' . $images->getClientOriginalExtension();
+            $origName = '/books/' . $book->id . '/' . Str() . '.' . $images->getClientOriginalExtension();
             $this->uploadImage($images, $origName);
             $image = \App\Models\Image::create([
                 'path' => '/images/' . $origName,
@@ -151,7 +152,7 @@ class ProfileController extends ApiController
 
         } elseif (is_array($images)) {
             foreach ($images as $image) {
-                $origName = '/books/' . $book->id . '/' . str_random() . '.' . $image->getClientOriginalExtension();
+                $origName = '/books/' . $book->id . '/' . Str::random() . '.' . $image->getClientOriginalExtension();
                 $this->uploadImage($image, $origName);
                 $image_instance = \App\Models\Image::create([
                     'path' => '/images/' . $origName,
@@ -228,7 +229,7 @@ class ProfileController extends ApiController
         $password = $request->get('password');
 
         if($fileAvatar){
-            $userAvatar = '/avatar/' . str_random() . '.' . $fileAvatar->getClientOriginalExtension();
+            $userAvatar = '/avatar/' . Str::random() . '.' . $fileAvatar->getClientOriginalExtension();
             /** @var \Intervention\Image\Image $img */
             $this->uploadImage($fileAvatar, $userAvatar);
 

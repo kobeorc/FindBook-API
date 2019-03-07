@@ -14,7 +14,7 @@ abstract class TestCase extends \Tests\TestCase
     /** @var array */
     protected $header;
 
-    public function setUp($auth = false)
+    public function setUp($auth = false): void
     {
         parent::setUp();
         $this->email = 'test@mail.ru';
