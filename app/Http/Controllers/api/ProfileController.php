@@ -238,6 +238,8 @@ class ProfileController extends ApiController
             $user->avatar()->attach($image);
         }
 
+        if($userEmail && $password)
+            $user->role = User::ROLE_USER;
 
         $user->name = $userName ?? $user->name;
         $user->email = $userEmail ?? $user->email;
