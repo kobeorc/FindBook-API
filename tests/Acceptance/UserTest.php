@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Acceptance;
+namespace Tests\Acceptance;
 
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -10,9 +10,6 @@ class UserTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * @group Acceptance
-     */
     public function testRegister_success()
     {
         $request = $this->post('api/register', ['email' => $this->email, 'password' => $this->password, 'password_confirmation' => $this->password, 'name' => 'Joe'], ['Accept' => 'application/json']);

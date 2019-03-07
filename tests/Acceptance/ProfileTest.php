@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Acceptance;
+namespace Tests\Acceptance;
 
 
 use Illuminate\Support\Str;
