@@ -36,7 +36,7 @@ Routes:
         Вернет список активных книг пользователя
 
     POST: profile/inventory
-        Params: book_id(если обновление книги), book_name, book_description, year, latitude, longitude, author_full_name[](всегда массив), publisher_full_name, category_id, images[](file передаваемый всегда массивом?)
+        Params: book_id(если обновление книги), book_name, book_description, year, latitude, longitude, author_full_name[](всегда массив), publisher_full_name, categories_ids[](всегда массив), images[](file передаваемый всегда массивом?)
         Добавление книги и обновление. Автор пока 1, картинки только добавляются
 
     DELETE: profile/inventory/{bookId}
@@ -69,7 +69,7 @@ Routes:
         Возвращает список издательств
     
     GET: search
-        Params: search (больше 3 символов)
+        Params: search
         Paginate: offset, limit 
         Возвращает список книг. 
         Поиск сейчас по books.name|books.description|authors.full_name|publishers.full_name

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Models\Book;
 use App\Models\Creator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class BookController extends ApiController
@@ -22,7 +23,8 @@ class BookController extends ApiController
         $publisherIds = (array)request()->get('publishersIds');
         $authorsIds = (array)request()->get('authorsIds');
 
-        $query = Book::isActive()->with(['authors', 'publishers', 'categories', 'users']);
+        /** @var Builder $query */
+        $query = Book::isActive()->with(['authors', 'publishers', 'categories', 'users'])->orderByDesc('id');
         if ($categoriesIds) {
             $query->whereHas('categories', function ($q) use ($categoriesIds) {
                 $q->whereIn('categories.id', $categoriesIds);

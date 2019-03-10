@@ -100,7 +100,8 @@ class ProfileController extends ApiController
             'author_full_name'    => 'sometimes|array',
             'author_full_name.*'  => 'sometimes|string',
             'publisher_full_name' => 'sometimes|string',
-            'category_id'         => 'sometimes|exists:categories,id',
+            'categories_ids'      => 'sometimes|array',
+            'categories_ids.*'    => 'sometimes|exists:categories,id',
             'images'              => 'sometimes|array',
             'images.*'            => 'sometimes|image',
         ]);
@@ -117,7 +118,7 @@ class ProfileController extends ApiController
         $authorFullNames = $request->get('author_full_name');
         $publisherFullName = $request->get('publisher_full_name');
 
-        $categoryId = $request->get('category_id');
+        $categoriesIds = (array)$request->get('categories_ids');
 
         if ($bookId) {
             $book = Book::findOrFail($bookId);
@@ -141,8 +142,8 @@ class ProfileController extends ApiController
         /** Add Images */
         $images = $request->file('images');
 
-        if ($images instanceof UploadedFile) {
-            $origName = '/books/' . $book->id . '/' . Str() . '.' . $images->getClientOriginalExtension();
+        if ($images instanceof UploadedFile) { // TODO delete dat always array
+            $origName = '/books/' . $book->id . '/' . Str::random() . '.' . $images->getClientOriginalExtension();
             $this->uploadImage($images, $origName);
             $image = \App\Models\Image::create([
                 'path' => '/images/' . $origName,
@@ -193,8 +194,8 @@ class ProfileController extends ApiController
             $book->creators()->attach($publisher);
         }
 
-        if ($categoryId) {
-            $book->categories()->attach($categoryId);
+        if ($categoriesIds) {
+            $book->categories()->sync($categoriesIds);
         }
 
         return response('', 201);
@@ -228,7 +229,7 @@ class ProfileController extends ApiController
         $fileAvatar = $request->file('avatar');
         $password = $request->get('password');
 
-        if($fileAvatar){
+        if ($fileAvatar) {
             $userAvatar = '/avatar/' . Str::random() . '.' . $fileAvatar->getClientOriginalExtension();
             /** @var \Intervention\Image\Image $img */
             $this->uploadImage($fileAvatar, $userAvatar);
@@ -239,8 +240,9 @@ class ProfileController extends ApiController
             $user->avatar()->attach($image);
         }
 
-        if($userEmail && $password)
+        if ($userEmail && $password) {
             $user->role = User::ROLE_USER;
+        }
 
         $user->name = $userName ?? $user->name;
         $user->email = $userEmail ?? $user->email;
