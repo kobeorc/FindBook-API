@@ -24,7 +24,7 @@ class BookController extends ApiController
         $authorsIds = (array)request()->get('authorsIds');
 
         /** @var Builder $query */
-        $query = Book::isActive()->with(['authors', 'publishers', 'categories', 'users'])->orderByDesc('id');
+        $query = Book::isActive()->with(['authors', 'publishers', 'categories', 'users','images'])->orderByDesc('id');
         if ($categoriesIds) {
             $query->whereHas('categories', function ($q) use ($categoriesIds) {
                 $q->whereIn('categories.id', $categoriesIds);
@@ -48,7 +48,7 @@ class BookController extends ApiController
 
     public function show(Request $request, $bookId)
     {
-        $book = Book::isActive()->with(['authors', 'publishers', 'categories', 'users'])->findOrFail($bookId);
+        $book = Book::isActive()->with(['authors', 'publishers', 'categories', 'users','images'])->findOrFail($bookId);
         return $this->jsonResponse($book);
     }
 }

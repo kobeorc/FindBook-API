@@ -18,7 +18,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNull('archived_at')->with(['authors', 'publishers', 'categories', 'users'])->get();
+        $books = $user->inventory()->whereNull('archived_at')->with(['authors', 'publishers', 'categories', 'users','images'])->get();
         return $this->jsonResponse($books);
     }
 
@@ -34,7 +34,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNotNull('archived_at')->with(['authors', 'publishers', 'categories', 'users'])->get();
+        $books = $user->inventory()->whereNotNull('archived_at')->with(['authors', 'publishers', 'categories', 'users','images'])->get();
 
         return $this->jsonResponse($books);
     }
@@ -73,7 +73,7 @@ class ProfileController extends ApiController
         /** @var User $user */
         $user = Auth::user();
 
-        $favorites = $user->favorite()->with(['authors', 'publishers', 'categories', 'users'])->get();
+        $favorites = $user->favorite()->with(['authors', 'publishers', 'categories', 'users','images'])->get();
 
         return $this->jsonResponse($favorites);
     }
@@ -277,5 +277,21 @@ class ProfileController extends ApiController
         return response('', 204);
     }
 
+    public function deleteImageFromBook(Request $request, $bookId, $imageId)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        /** @var Book $book */
+        $book = $user->inventory()->whereBookId($bookId);
+        abort_unless($book->exists(), 404, 'У пользователя нет этой книги');
+        $book = $book->first();
+        $image = $book->images()->whereImageId($imageId);
+        abort_unless($image->exists(),404,'У книги нет такого изображения');
+
+        $book->images()->detach($imageId);
+
+        return response('',204);
+
+    }
 
 }

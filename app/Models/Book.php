@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Auth;
 
 class Book extends Model
 {
@@ -33,7 +32,6 @@ class Book extends Model
     protected $appends = [
         'archived_at',
         'status',
-        'images',
         'is_favorite',
     ];
 
@@ -103,11 +101,6 @@ class Book extends Model
     public function getStatusAttribute()
     {
         return $this->archived_at ? self::STATUS_ARCHIVED : self::STATUS_ACTIVE;
-    }
-
-    public function getImagesAttribute()
-    {
-        return $this->images()->get() ?? [];
     }
 
     public function getIsFavoriteAttribute()

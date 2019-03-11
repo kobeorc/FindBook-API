@@ -41,6 +41,9 @@ Routes:
 
     DELETE: profile/inventory/{bookId}
         Удаляет книгу
+        
+    DELETE: profile/inventory/{bookId}/images/{imageId}
+        Удаляет изображение из книги
     
     GET: profile/inventory/archive
         Возвращает список книг в архиве

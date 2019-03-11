@@ -29,6 +29,7 @@ Route::middleware(['custom.auth'])->group(function (){
     Route::get('profile/inventory','api\ProfileController@inventory');
     Route::post('profile/inventory','api\ProfileController@putToInventory');
     Route::delete('profile/inventory/{bookId}','api\ProfileController@deleteFromInventory')->where(['bookId'=>'[0-9]']);
+    Route::delete('profile/inventory/{bookId}/images/{imageId}','api\ProfileController@deleteImageFromBook')->where(['bookId'=>'[0-9]','imageId'=>'[0-9]']);
 
     Route::get('profile/inventory/archive','api\ProfileController@archive');
     Route::post('profile/inventory/archive','api\ProfileController@putToArchive');

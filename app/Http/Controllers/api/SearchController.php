@@ -23,7 +23,7 @@ class SearchController extends ApiController
                       ->orWhereHas('publishers', function ($query) use ($string) {
                           $query->where('full_name', 'like', '%' . $string . '%');
                       })
-                      ->with(['authors', 'publishers', 'categories', 'users']);
+                      ->with(['authors', 'publishers', 'categories', 'users','images']);
 
         return $this->jsonPaginateResponse($query);
 
