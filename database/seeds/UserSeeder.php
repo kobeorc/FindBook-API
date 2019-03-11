@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             $user->avatar()->save(factory(\App\Models\Image::class)->make());
         });
 
-        factory(\App\Models\User::class, 5)->create()->each(function (\App\Models\User $user) {
+        factory(\App\Models\User::class, 100)->create()->each(function (\App\Models\User $user) {
             $user->auth_token()->saveMany(factory(\App\Models\UserAuthToken::class, 5)->make());
             $user->inventory()->saveMany(factory(\App\Models\Book::class, 5)->create()->each(function (\App\Models\Book $book) {
                 $book->images()->saveMany(factory(\App\Models\Image::class, 3)->create());
