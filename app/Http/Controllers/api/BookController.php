@@ -63,7 +63,7 @@ class BookController extends ApiController
      */
     private function getNearestBooks($latitude, $longitude)
     {
-        $books = Book::get();
+        $books = Book::isActive()->with(['authors', 'publishers', 'categories', 'users', 'images'])->get();
         $booksWithLocation = [];
         $userLocation = new Point($latitude, $longitude);
 
