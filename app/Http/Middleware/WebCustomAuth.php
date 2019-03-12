@@ -6,7 +6,7 @@ use App\Models\UserAuthToken;
 use Closure;
 use Illuminate\Http\Request;
 
-class Auth
+class WebCustomAuth extends Basic
 {
     /**
      * Handle an incoming request.

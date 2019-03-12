@@ -2,8 +2,9 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\Auth;
+use App\Http\Middleware\ApiCustomAuth;
 use App\Http\Middleware\ShouldAcceptJson;
+use App\Http\Middleware\WebCustomAuth;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -63,7 +64,8 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
-        'custom.auth' => Auth::class,
+        'api.custom.auth' => ApiCustomAuth::class,
+        'web.custom.auth' => WebCustomAuth::class,
         'should.json' => ShouldAcceptJson::class,
 
     ];
