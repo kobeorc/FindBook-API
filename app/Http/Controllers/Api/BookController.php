@@ -26,10 +26,6 @@ class BookController extends ApiController
         $latitude = request()->get('latitude', false);
         $longitude = request()->get('longitude', false);
 
-        if ($latitude && $longitude) {
-            return $this->jsonResponse($this->getNearestBooks($latitude, $longitude));
-        }
-
         /** @var Builder $query */
         $query = Book::isActive()->with(['authors', 'publishers', 'categories', 'users', 'images'])->orderByDesc('id');
         if ($categoriesIds) {
@@ -50,20 +46,24 @@ class BookController extends ApiController
             });
         }
 
+        if ($latitude && $longitude) {
+            return $this->jsonPaginateCollectionResponse($this->getNearestBooks($query, $latitude, $longitude));
+        }
+
         return $this->jsonPaginateResponse($query);
     }
 
     /**
      * TMP for geolocation nearest point
      * move mechanic to psql?
-     *
-     * @param $latitude
-     * @param $longitude
+     * @param Builder $query
+     * @param         $latitude
+     * @param         $longitude
      * @return \Illuminate\Support\Collection
      */
-    private function getNearestBooks($latitude, $longitude)
+    private function getNearestBooks(Builder $query, $latitude, $longitude)
     {
-        $books = Book::isActive()->with(['authors', 'publishers', 'categories', 'users', 'images'])->get();
+        $books = $query->get();
         $booksWithLocation = [];
         $userLocation = new Point($latitude, $longitude);
 
