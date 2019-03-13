@@ -19,12 +19,24 @@ class BookController extends ApiController
             'publishersIds.*' => 'integer',
             'authorsIds'      => 'sometimes|array',
             'authorsIds.*'    => 'integer',
+            'square_top'      => 'required_with:square_left,square_bottom,square_right',
+            'square_left'     => 'required_with:square_top,square_bottom,square_right',
+            'square_right'    => 'required_with:square_top,square_bottom,square_left',
+            'square_bottom'   => 'required_with:square_top,square_left,square_right',
+            'latitude'        => 'required_with:longitude',
+            'longitude'       => 'required_with:latitude',
         ]);
+
         $categoriesIds = (array)request()->get('categoriesIds');
         $publisherIds = (array)request()->get('publishersIds');
         $authorsIds = (array)request()->get('authorsIds');
         $latitude = request()->get('latitude', false);
         $longitude = request()->get('longitude', false);
+
+        $square_top = request()->get('square_top');
+        $square_left = request()->get('square_left');
+        $square_right = request()->get('square_right');
+        $square_bottom = request()->get('square_bottom');
 
         /** @var Builder $query */
         $query = Book::isActive()->with(['authors', 'publishers', 'categories', 'users', 'images'])->orderByDesc('id');
@@ -44,6 +56,10 @@ class BookController extends ApiController
                 $q->whereIn('creators.id', $authorsIds)
                   ->where('type', Creator::TYPE_AUTHOR);
             });
+        }
+        if ($square_top && $square_bottom && $square_left && $square_right) {
+            $query->whereBetween('latitude', [$square_top, $square_bottom]);
+            $query->whereBetween('longitude', [$square_left, $square_right]);
         }
 
         if ($latitude && $longitude) {
