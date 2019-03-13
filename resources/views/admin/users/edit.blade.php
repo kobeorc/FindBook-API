@@ -30,7 +30,16 @@
                 <label for="newPassword">Установить новый пароль</label>
                 <input class="form-control" type="text" id="newPassword" name="newPassword" />
             </div>
+            <button type="submit" class="btn btn-primary">PUSH</button>
         </div>
-        <button type="submit" class="btn btn-primary">PUSH</button>
     </form>
+    <hr/>
+    <div class="col">
+        <label for="bookList">Книги <span class="badge badge-info">{{ $user->inventory()->count() }}</span></label>
+        @foreach($user->inventory as $book)
+            <ul class="list-group" id="bookList">
+                <li class="list-group-item">#{{ $book->id }}: {{ $book->name ?? '' }}</li>
+            </ul>
+        @endforeach
+    </div>
 @endsection

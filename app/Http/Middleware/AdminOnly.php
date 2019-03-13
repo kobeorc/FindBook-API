@@ -22,7 +22,8 @@ class AdminOnly
         $user = Auth::user();
 
         if ($user->role !== User::ROLE_ADMIN) {
-            return response('', 403);
+            Auth::logout();
+            return response('', 401, ['WWW-Authenticate' => 'Basic']);
         }
 
         return $next($request);

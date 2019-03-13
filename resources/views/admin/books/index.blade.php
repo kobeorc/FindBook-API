@@ -18,9 +18,8 @@
                 <td>{{ $book->name ?? ''}}</td>
                 <td>{{ $book->description ?? '' }}</td>
                 <td>{{ $book->year ?? '' }}</td>
-                <td>{{ $book->users->first()->name }}</td>
+                <td><a href="{{ route('users.edit',['userId'=>$book->users->first()->id]) }}">{{ $book->users->first()->name }}</a></td>
                 <td>{{ $book->latitude. ' '. $book->longitude }}</td>
-                <td><a href="{{ route('books.edit',['bookId'=>$book->id]) }}" class="btn btn-light">UPDATE</a></td>
             </tr>
         @endforeach
         </tbody>

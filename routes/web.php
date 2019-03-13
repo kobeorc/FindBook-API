@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 
-Route::middleware(['auth.basic'])->group(function (){
+Route::middleware(['auth.basic','admin.only'])->group(function (){
     Route::get('/users','admin\UserController@index')->name('users');
     Route::get('/users/{usersId}/edit','admin\UserController@edit')->where(['usersId'=>'[0-9]+'])->name('users.edit');
     Route::post('/users/{usersId}','admin\UserController@update')->where(['usersId'=>'[0-9]+'])->name('users.update');
