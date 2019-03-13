@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class Handler extends ExceptionHandler
 {
@@ -59,7 +60,7 @@ class Handler extends ExceptionHandler
     {
         $exception = $this->prepareException($exception);
 
-        if ($exception instanceof \Illuminate\Http\Exception\HttpResponseException) {
+        if ($exception instanceof HttpResponseException) {
             $exception = $exception->getResponse();
         }
 
@@ -104,11 +105,6 @@ class Handler extends ExceptionHandler
             default:
                 $response['message'] = ($statusCode == 500) ? 'Server Error' : $exception->getMessage();
                 break;
-        }
-
-        if (config('app.debug')) {
-            $response['trace'] = $exception->getTrace();
-            $response['code'] = $exception->getCode();
         }
 
         $response['status'] = $statusCode;
