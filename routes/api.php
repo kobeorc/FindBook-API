@@ -11,31 +11,31 @@
 |
 */
 
-Route::post('login','api\UserController@login');
-Route::post('register','api\UserController@register');
-Route::post('register/silent','api\UserController@registerGuest');
+Route::post('login','Api\UserController@login');
+Route::post('register','Api\UserController@register');
+Route::post('register/silent','Api\UserController@registerGuest');
 
-Route::middleware(['api.custom.auth'])->group(function (){
+Route::middleware(['Api.custom.auth'])->group(function (){
 
-    Route::get('search','api\SearchController@index');
-    Route::get('categories','api\CategoryController@index');
-    Route::get('publishers','api\CreatorController@publisher');
-    Route::get('books','api\BookController@index');
-    Route::get('books/{bookId}','api\BookController@show');
+    Route::get('search','Api\SearchController@index');
+    Route::get('categories','Api\CategoryController@index');
+    Route::get('publishers','Api\CreatorController@publisher');
+    Route::get('books','Api\BookController@index');
+    Route::get('books/{bookId}','Api\BookController@show');
 
-    Route::get('profile','api\ProfileController@current');
-    Route::post('profile','api\ProfileController@updateProfile');
+    Route::get('profile','Api\ProfileController@current');
+    Route::post('profile','Api\ProfileController@updateProfile');
 
-    Route::get('profile/inventory','api\ProfileController@inventory');
-    Route::post('profile/inventory','api\ProfileController@putToInventory');
-    Route::delete('profile/inventory/{bookId}','api\ProfileController@deleteFromInventory')->where(['bookId'=>'[0-9]']);
-    Route::delete('profile/inventory/{bookId}/images/{imageId}','api\ProfileController@deleteImageFromBook')->where(['bookId'=>'[0-9]','imageId'=>'[0-9]']);
+    Route::get('profile/inventory','Api\ProfileController@inventory');
+    Route::post('profile/inventory','Api\ProfileController@putToInventory');
+    Route::delete('profile/inventory/{bookId}','Api\ProfileController@deleteFromInventory')->where(['bookId'=>'[0-9]']);
+    Route::delete('profile/inventory/{bookId}/images/{imageId}','Api\ProfileController@deleteImageFromBook')->where(['bookId'=>'[0-9]','imageId'=>'[0-9]']);
 
-    Route::get('profile/inventory/archive','api\ProfileController@archive');
-    Route::post('profile/inventory/archive','api\ProfileController@putToArchive');
-    Route::delete('profile/inventory/archive/{bookId}','api\ProfileController@deleteFromArchive')->where(['bookId'=>'[0-9]+']);
+    Route::get('profile/inventory/archive','Api\ProfileController@archive');
+    Route::post('profile/inventory/archive','Api\ProfileController@putToArchive');
+    Route::delete('profile/inventory/archive/{bookId}','Api\ProfileController@deleteFromArchive')->where(['bookId'=>'[0-9]+']);
 
-    Route::get('profile/inventory/favorite','api\ProfileController@getFavorite');
-    Route::post('profile/inventory/favorite','api\ProfileController@putToFavorite');
-    Route::delete('profile/inventory/favorite/{bookId}','api\ProfileController@deleteFromFavorite')->where(['bookId'=>'[0-9]+']);
+    Route::get('profile/inventory/favorite','Api\ProfileController@getFavorite');
+    Route::post('profile/inventory/favorite','Api\ProfileController@putToFavorite');
+    Route::delete('profile/inventory/favorite/{bookId}','Api\ProfileController@deleteFromFavorite')->where(['bookId'=>'[0-9]+']);
 });
