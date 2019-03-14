@@ -15,7 +15,7 @@ Route::post('login','Api\UserController@login');
 Route::post('register','Api\UserController@register');
 Route::post('register/silent','Api\UserController@registerGuest');
 
-Route::middleware(['Api.custom.auth'])->group(function (){
+Route::middleware(['api.custom.auth'])->group(function (){
 
     Route::get('search','Api\SearchController@index');
     Route::get('categories','Api\CategoryController@index');
