@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    print 'FindBook API';
-});
+Route::view('/', 'welcome');
 
 
 Route::middleware(['auth.basic','admin.only'])->group(function (){
