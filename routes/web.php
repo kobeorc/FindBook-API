@@ -17,11 +17,11 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth.basic','admin.only'])->group(function (){
-    Route::get('/users','admin\UserController@index')->name('users');
-    Route::get('/users/{usersId}/edit','admin\UserController@edit')->where(['usersId'=>'[0-9]+'])->name('users.edit');
-    Route::post('/users/{usersId}','admin\UserController@update')->where(['usersId'=>'[0-9]+'])->name('users.update');
+    Route::get('/users','Admin\UserController@index')->name('users');
+    Route::get('/users/{usersId}/edit','Admin\UserController@edit')->where(['usersId'=>'[0-9]+'])->name('users.edit');
+    Route::post('/users/{usersId}','Admin\UserController@update')->where(['usersId'=>'[0-9]+'])->name('users.update');
 
-    Route::get('/books','admin\BookController@index')->name('books');
-    Route::get('/books/{bookId}/edit','admin\BookController@edit')->where(['bookId'=>'[0-9]+'])->name('books.edit');
-    Route::post('/books/{bookId}','admin\BookController@update')->where(['bookId'=>'[0-9]+'])->name('books.update');
+    Route::get('/books','Admin\BookController@index')->name('books');
+    Route::get('/books/{bookId}/edit','Admin\BookController@edit')->where(['bookId'=>'[0-9]+'])->name('books.edit');
+    Route::post('/books/{bookId}','Admin\BookController@update')->where(['bookId'=>'[0-9]+'])->name('books.update');
 });
