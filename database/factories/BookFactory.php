@@ -7,7 +7,7 @@ $factory->define(\App\Models\Book::class, function (Faker $faker) {
         'name'        => $faker->name,
         'description' => $faker->realText(),
         'year'        => $faker->year,
-        'latitude'    => '55.75' . rand(1, 10000),
-        'longitude'   => '37.62' . rand(1, 10000),
+        'latitude'    => '55.83' . rand(1, 10000),
+        'longitude'   => '37.37' . rand(1, 10000),
     ];
 });
