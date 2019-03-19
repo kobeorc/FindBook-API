@@ -9,10 +9,6 @@ class SearchController extends ApiController
 {
     public function index(Request $request)
     {
-        $this->validate($request, [
-            'search' => 'required'
-        ]);
-
         $string = $request->get('search', '');
 
         $query = Book::where('name', 'like', '%' . $string . '%')
