@@ -143,25 +143,13 @@ class ProfileController extends ApiController
 
         /** Add Images */
         $images = $request->file('images');
-
-        if ($images instanceof UploadedFile) { // TODO delete dat always array
-            $origName = '/books/' . $book->id . '/' . Str::random() . '.' . $images->getClientOriginalExtension();
-            $this->uploadImage($images, $origName);
-            $image = \App\Models\Image::create([
+        foreach ($images as $image) {
+            $origName = '/books/' . $book->id . '/' . Str::random() . '.' . $image->getClientOriginalExtension();
+            $this->uploadImage($image, $origName);
+            $image_instance = \App\Models\Image::create([
                 'path' => '/images/' . $origName,
             ]);
-
-            $book->images()->attach($image);
-
-        } elseif (is_array($images)) {
-            foreach ($images as $image) {
-                $origName = '/books/' . $book->id . '/' . Str::random() . '.' . $image->getClientOriginalExtension();
-                $this->uploadImage($image, $origName);
-                $image_instance = \App\Models\Image::create([
-                    'path' => '/images/' . $origName,
-                ]);
-                $book->images()->attach($image_instance);
-            }
+            $book->images()->attach($image_instance);
         }
 
         if (!empty($authorFullNames)) {
