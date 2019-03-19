@@ -18,7 +18,7 @@ Routes:
   Только с авторизацией:
   
     GET: books
-        Params: categoriesIds (array), publishersIds (array), authorsIds (array), latitude && longitude, square_top && square_left && square_bottom && square_left. Необязательные параметры для фильтрации
+        Params: categoriesIds (array), publishersIds (array), authorsIds (array), latitude && longitude (формата /^[0-9]+\.([0-9]){0,7}$/), square_top && square_left && square_bottom && square_left. Необязательные параметры для фильтрации
         Paginate: offset, limit 
         Возвращает список всех книг  
     

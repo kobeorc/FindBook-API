@@ -18,7 +18,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNull('archived_at')->with(['authors', 'publishers', 'categories', 'users','images'])->get();
+        $books = $user->inventory()->whereNull('archived_at')->with(['authors', 'publishers', 'categories', 'users', 'images'])->get();
         return $this->jsonResponse($books);
     }
 
@@ -34,7 +34,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNotNull('archived_at')->with(['authors', 'publishers', 'categories', 'users','images'])->get();
+        $books = $user->inventory()->whereNotNull('archived_at')->with(['authors', 'publishers', 'categories', 'users', 'images'])->get();
 
         return $this->jsonResponse($books);
     }
@@ -73,7 +73,7 @@ class ProfileController extends ApiController
         /** @var User $user */
         $user = Auth::user();
 
-        $favorites = $user->favorite()->with(['authors', 'publishers', 'categories', 'users','images'])->get();
+        $favorites = $user->favorite()->with(['authors', 'publishers', 'categories', 'users', 'images'])->get();
 
         return $this->jsonResponse($favorites);
     }
@@ -104,6 +104,8 @@ class ProfileController extends ApiController
             'categories_ids.*'    => 'sometimes|exists:categories,id',
             'images'              => 'sometimes|array',
             'images.*'            => 'sometimes|image',
+            'latitude'            => 'required_with:longitude|regex:/^[0-9]+\.([0-9]){0,7}$/',
+            'longitude'           => 'required_with:latitude|regex:/^[0-9]+\.([0-9]){0,7}$/',
         ]);
         /** @var User $user */
         $user = Auth::user();
@@ -286,11 +288,11 @@ class ProfileController extends ApiController
         abort_unless($book->exists(), 404, 'У пользователя нет этой книги');
         $book = $book->first();
         $image = $book->images()->whereImageId($imageId);
-        abort_unless($image->exists(),404,'У книги нет такого изображения');
+        abort_unless($image->exists(), 404, 'У книги нет такого изображения');
 
         $book->images()->detach($imageId);
 
-        return response('',204);
+        return response('', 204);
 
     }
 
