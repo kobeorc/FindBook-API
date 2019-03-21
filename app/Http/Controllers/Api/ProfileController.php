@@ -94,18 +94,18 @@ class ProfileController extends ApiController
     {
         $this->validate($request, [
             'book_id'             => 'sometimes|exists:books,id',
-            'book_name'           => 'sometimes|string',
-            'book_description'    => 'sometimes',//TODO set normal validator
-            'year'                => 'sometimes|integer',
+            'book_name'           => 'required|string',
+            'book_description'    => 'sometimes|string|nullable',
+            'year'                => 'sometimes|integer|nullable|digits:4|max:'.Carbon::now('Y'),
             'author_full_name'    => 'sometimes|array',
-            'author_full_name.*'  => 'sometimes|string',
-            'publisher_full_name' => 'sometimes|string',
+            'author_full_name.*'  => 'sometimes|string|nullable',
+            'publisher_full_name' => 'sometimes|string|nullable',
             'categories_ids'      => 'sometimes|array',
-            'categories_ids.*'    => 'sometimes|exists:categories,id',
+            'categories_ids.*'    => 'sometimes|exists:categories,id|nullable',
             'images'              => 'sometimes|array',
             'images.*'            => 'sometimes|image',
-            'latitude'            => 'required_with:longitude|regex:/^[0-9]+\.([0-9]){0,7}$/',
-            'longitude'           => 'required_with:latitude|regex:/^[0-9]+\.([0-9]){0,7}$/',
+            'latitude'            => 'required_with:longitude|regex:/^\-?[0-9]+\.([0-9]){0,7}$/',
+            'longitude'           => 'required_with:latitude|regex:/^\-?[0-9]+\.([0-9]){0,7}$/',
         ]);
         /** @var User $user */
         $user = Auth::user();
@@ -120,7 +120,7 @@ class ProfileController extends ApiController
         $authorFullNames = $request->get('author_full_name');
         $publisherFullName = $request->get('publisher_full_name');
 
-        $categoriesIds = (array)$request->get('categories_ids');
+        $categoriesIds = $request->get('categories_ids');
 
         if ($bookId) {
             $book = Book::findOrFail($bookId);
@@ -152,7 +152,7 @@ class ProfileController extends ApiController
             $book->images()->attach($image_instance);
         }
 
-        if (!empty($authorFullNames)) {
+        if (!empty($authorFullNames[0])) {
             $authorId = [];
             foreach ($authorFullNames as $authorFullName) {
                 $author = Creator::query()
@@ -171,7 +171,7 @@ class ProfileController extends ApiController
             $book->creators()->sync($authorId);
         }
 
-        if ($publisherFullName) {
+        if (!empty($publisherFullName)) {
             $publisher = Creator::query()
                                 ->whereType(Creator::TYPE_PUBLISHER)
                                 ->whereFullName($publisherFullName)
@@ -185,11 +185,11 @@ class ProfileController extends ApiController
             $book->creators()->attach($publisher);
         }
 
-        if ($categoriesIds) {
+        if (!empty($categoriesIds[0])) {
             $book->categories()->sync($categoriesIds);
         }
 
-        return response('', 201);
+        return $this->jsonResponse($book);
     }
 
     public function uploadImage($image, $origName)

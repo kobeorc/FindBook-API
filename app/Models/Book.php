@@ -25,6 +25,7 @@ class Book extends Model
     protected $fillable = [
         'name',
         'description',
+        'year',
         'latitude',
         'longitude',
     ];
@@ -38,8 +39,9 @@ class Book extends Model
     protected $casts = [
         'name'        => 'string',
         'description' => 'string',
-        'latitude'    => 'string',
-        'longitude'   => 'string',
+        'latitude'    => 'float',
+        'longitude'   => 'float',
+        'year'        => 'integer',
     ];
 
     protected $hidden = [
