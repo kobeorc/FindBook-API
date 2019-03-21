@@ -142,7 +142,7 @@ class ProfileController extends ApiController
         }
 
         /** Add Images */
-        $images = $request->file('images');
+        $images = $request->file('images',[]);
         foreach ($images as $image) {
             $origName = '/books/' . $book->id . '/' . Str::random() . '.' . $image->getClientOriginalExtension();
             $this->uploadImage($image, $origName);
@@ -180,6 +180,7 @@ class ProfileController extends ApiController
                 $publisher = new Creator();
                 $publisher->type = Creator::TYPE_PUBLISHER;
                 $publisher->full_name = $publisherFullName;
+                $publisher->save();
             }
             $book->creators()->attach($publisher);
         }
