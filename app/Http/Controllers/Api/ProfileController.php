@@ -95,7 +95,7 @@ class ProfileController extends ApiController
         $this->validate($request, [
             'book_id'             => 'sometimes|exists:books,id',
             'book_name'           => 'sometimes|string',
-            'book_description'    => 'sometimes|string',
+            'book_description'    => 'sometimes',//TODO set normal validator
             'year'                => 'sometimes|integer',
             'author_full_name'    => 'sometimes|array',
             'author_full_name.*'  => 'sometimes|string',
@@ -170,7 +170,7 @@ class ProfileController extends ApiController
                                  ->whereFullName($authorFullName)
                                  ->first();
 
-                if (!$author->exists()) {
+                if (!$author) {
                     $author = new Creator();
                     $author->type = Creator::TYPE_AUTHOR;
                     $author->full_name = $authorFullName;
@@ -186,7 +186,7 @@ class ProfileController extends ApiController
                                 ->whereType(Creator::TYPE_PUBLISHER)
                                 ->whereFullName($publisherFullName)
                                 ->first();
-            if (!$publisher->exists()) {
+            if (!$publisher) {
                 $publisher = new Creator();
                 $publisher->type = Creator::TYPE_PUBLISHER;
                 $publisher->full_name = $publisherFullName;
