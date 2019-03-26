@@ -38,6 +38,10 @@ class BookController extends ApiController
         $square_right = request()->get('square_right');
         $square_bottom = request()->get('square_bottom');
 
+        $cache_key = \Hash::make(request());
+        if(\Cache::has($cache_key)){
+            return \Cache::get($cache_key);
+        }
         /** @var Builder $query */
         $query = Book::isActive()->with(['authors', 'publishers', 'categories', 'users', 'images'])->orderByDesc('id');
         if ($categoriesIds) {

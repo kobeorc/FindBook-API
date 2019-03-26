@@ -4,6 +4,7 @@ namespace App\Http;
 
 use App\Http\Middleware\AdminOnly;
 use App\Http\Middleware\ApiCustomAuth;
+use App\Http\Middleware\CacheClear;
 use App\Http\Middleware\ShouldAcceptJson;
 use App\Http\Middleware\WebCustomAuth;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -69,6 +70,7 @@ class Kernel extends HttpKernel
         'web.custom.auth' => WebCustomAuth::class,
         'should.json' => ShouldAcceptJson::class,
         'admin.only' => AdminOnly::class,
+        'cache.clear' => CacheClear::class,
     ];
 
     /**

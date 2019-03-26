@@ -13,18 +13,24 @@ abstract class ApiController extends Controller
         return response()->json($data);
     }
 
-    protected function jsonPaginateResponse(Builder $data)
+    protected function jsonPaginateResponse(Builder $query)
     {
         $offset = request()->get('offset');
         $limit = request()->get('limit');
 
-        if($offset)
-            $data->offset($offset);
+        if ($offset) {
+            $query->offset($offset);
+        }
 
-        if($limit)
-            $data->limit($limit);
+        if ($limit) {
+            $query->limit($limit);
+        }
+        $items = $query->get();
 
-        return response()->json($data->get());
+        $cache_key = \Hash::make(request());
+        \Cache::put($cache_key, $items, 10);
+
+        return response()->json($items);
     }
 
     protected function jsonPaginateCollectionResponse(Collection $data)
@@ -32,11 +38,13 @@ abstract class ApiController extends Controller
         $offset = request()->get('offset');
         $limit = request()->get('limit');
 
-        if($offset)
+        if ($offset) {
             $data->slice($offset);
+        }
 
-        if($limit)
+        if ($limit) {
             $data->take($limit);
+        }
 
         return response()->json($data);
     }

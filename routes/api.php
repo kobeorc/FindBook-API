@@ -24,18 +24,18 @@ Route::middleware(['api.custom.auth'])->group(function (){
     Route::get('books/{bookId}','Api\BookController@show');
 
     Route::get('profile','Api\ProfileController@current');
-    Route::post('profile','Api\ProfileController@updateProfile');
+    Route::post('profile','Api\ProfileController@updateProfile')->middleware('cache.clear');
 
     Route::get('profile/inventory','Api\ProfileController@inventory');
-    Route::post('profile/inventory','Api\ProfileController@putToInventory');
-    Route::delete('profile/inventory/{bookId}','Api\ProfileController@deleteFromInventory')->where(['bookId'=>'[0-9]']);
-    Route::delete('profile/inventory/{bookId}/images/{imageId}','Api\ProfileController@deleteImageFromBook')->where(['bookId'=>'[0-9]','imageId'=>'[0-9]']);
+    Route::post('profile/inventory','Api\ProfileController@putToInventory')->middleware('cache.clear');
+    Route::delete('profile/inventory/{bookId}','Api\ProfileController@deleteFromInventory')->where(['bookId'=>'[0-9]'])->middleware('cache.clear');
+    Route::delete('profile/inventory/{bookId}/images/{imageId}','Api\ProfileController@deleteImageFromBook')->where(['bookId'=>'[0-9]','imageId'=>'[0-9]'])->middleware('cache.clear');
 
     Route::get('profile/inventory/archive','Api\ProfileController@archive');
-    Route::post('profile/inventory/archive','Api\ProfileController@putToArchive');
-    Route::delete('profile/inventory/archive/{bookId}','Api\ProfileController@deleteFromArchive')->where(['bookId'=>'[0-9]+']);
+    Route::post('profile/inventory/archive','Api\ProfileController@putToArchive')->middleware('cache.clear');
+    Route::delete('profile/inventory/archive/{bookId}','Api\ProfileController@deleteFromArchive')->where(['bookId'=>'[0-9]+'])->middleware('cache.clear');
 
     Route::get('profile/inventory/favorite','Api\ProfileController@getFavorite');
-    Route::post('profile/inventory/favorite','Api\ProfileController@putToFavorite');
-    Route::delete('profile/inventory/favorite/{bookId}','Api\ProfileController@deleteFromFavorite')->where(['bookId'=>'[0-9]+']);
+    Route::post('profile/inventory/favorite','Api\ProfileController@putToFavorite')->middleware('cache.clear');
+    Route::delete('profile/inventory/favorite/{bookId}','Api\ProfileController@deleteFromFavorite')->where(['bookId'=>'[0-9]+'])->middleware('cache.clear');
 });
