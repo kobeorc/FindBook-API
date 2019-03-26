@@ -27,7 +27,7 @@ abstract class ApiController extends Controller
         }
         $items = $query->get();
 
-        $cache_key = \Hash::make(request());
+        $cache_key = md5(json_encode(request()->toArray()));
         \Cache::put($cache_key, $items, 10);
 
         return response()->json($items);
