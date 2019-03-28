@@ -106,6 +106,7 @@ class ProfileController extends ApiController
             'images.*'            => 'sometimes|image',
             'latitude'            => 'required_with:longitude|regex:/^\-?[0-9]+\.([0-9]){0,7}$/',
             'longitude'           => 'required_with:latitude|regex:/^\-?[0-9]+\.([0-9]){0,7}$/',
+            'address'             => 'sometimes|string',
         ]);
         /** @var User $user */
         $user = Auth::user();
@@ -116,6 +117,7 @@ class ProfileController extends ApiController
         $bookYear = $request->get('year');
         $bookLatitude = $request->get('latitude');
         $bookLongitude = $request->get('longitude');
+        $bookAddress = $request->get('address','');
 
         $authorFullNames = $request->get('author_full_name');
         $publisherFullName = $request->get('publisher_full_name');
@@ -129,6 +131,7 @@ class ProfileController extends ApiController
             $book->latitude = $bookLatitude ?? $book->latitude;
             $book->longitude = $bookLongitude ?? $book->longitude;
             $book->year = $bookYear ?? $book->year;
+            $book->address = $bookAddress ?? $book->address;
             $book->save();
         } else {
             $book = New Book();
@@ -137,6 +140,7 @@ class ProfileController extends ApiController
             $book->latitude = $bookLatitude;
             $book->longitude = $bookLongitude;
             $book->year = $bookYear;
+            $book->address = $bookAddress;
             $book->save();
             $book->users()->attach($user);
         }

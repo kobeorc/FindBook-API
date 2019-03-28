@@ -19,6 +19,7 @@ class CreateBooksTable extends Migration
             $table->longText('description')->nullable();
             $table->decimal('latitude',10,7)->nullable();
             $table->decimal('longitude',10,7)->nullable();
+            $table->string('address')->nullable();
             $table->integer('year')->nullable();
             $table->timestamps();
             $table->softDeletes();
