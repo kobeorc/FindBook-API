@@ -28,6 +28,7 @@ class Book extends Model
         'year',
         'latitude',
         'longitude',
+        'address',
     ];
 
     protected $appends = [
@@ -42,6 +43,7 @@ class Book extends Model
         'latitude'    => 'float',
         'longitude'   => 'float',
         'year'        => 'integer',
+        'address'     => 'string',
     ];
 
     protected $hidden = [

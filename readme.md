@@ -18,7 +18,9 @@ Routes:
   Только с авторизацией:
   
     GET: books
-        Params: categoriesIds (array), publishersIds (array), authorsIds (array), latitude && longitude (формата /^[0-9]+\.([0-9]){0,7}$/), square_top && square_left && square_bottom && square_left. Необязательные параметры для фильтрации
+        Params: categoriesIds (array), publishersIds (array), authorsIds (array), 
+                latitude && longitude (формата /^[0-9]+\.([0-9]){0,7}$/), 
+                square_top && square_left && square_bottom && square_left
         Paginate: offset, limit 
         Возвращает список всех книг  
     
@@ -36,8 +38,10 @@ Routes:
         Вернет список активных книг пользователя
 
     POST: profile/inventory
-        Params: book_id(если обновление книги), book_name, book_description, year, latitude, longitude, author_full_name[](всегда массив), publisher_full_name, categories_ids[](всегда массив), images[](file передаваемый всегда массивом?)
-        Добавление книги и обновление. Автор пока 1, картинки только добавляются
+        Params: book_id(если обновление книги), book_name, book_description, year, 
+                latitude, longitude, author_full_name[](всегда массив), publisher_full_name, categories_ids[](всегда массив), 
+                images[](file передаваемый всегда массивом), address
+        Добавление книги и обновление
 
     DELETE: profile/inventory/{bookId}
         Удаляет книгу
