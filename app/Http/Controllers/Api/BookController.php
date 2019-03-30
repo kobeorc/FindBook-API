@@ -38,9 +38,7 @@ class BookController extends ApiController
         $square_right = request()->get('square_right');
         $square_bottom = request()->get('square_bottom');
 
-        $cache_key = md5(json_encode(request()->toArray()));
-
-        if(\Cache::has($cache_key)){
+        if($cache_key = \Cache::has(\CacheHelper::getKeyCache(\request()))){
             return \Cache::get($cache_key);
         }
         /** @var Builder $query */

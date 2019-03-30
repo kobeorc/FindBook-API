@@ -2,41 +2,35 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Book;
 use Illuminate\Console\Command;
+use Illuminate\Database\Eloquent\Builder;
 
 class WarmUpCache extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'command:name';
+    const COUNT_ITEMS = 100;
+    protected $signature   = 'cache:warmUp';
+    protected $description = 'WarmUp cache for /books. first 100 items';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
-    protected $description = 'Command description';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         parent::__construct();
     }
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
     public function handle()
     {
-        //
+        $limit = 10;
+        $offset = 0;
+
+        while ($offset < self::COUNT_ITEMS) {
+            /** @var Builder $query */
+            $query = Book::isActive()->with(['authors', 'publishers', 'categories', 'users', 'images'])->orderByDesc('id');
+            $items = $query->limit($limit)->offset($offset)->get();
+            $request = collect(['limit' => $limit, 'offset' => $offset]);
+            \Cache::put(\CacheHelper::getKeyCache($request), $items, 10);
+
+            $offset += 10;
+        }
+
     }
 }

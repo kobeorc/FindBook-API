@@ -35,6 +35,9 @@
         }
     },
     "autoload": {
+        "files": [
+            "app/Helpers/CacheHelper.php"
+        ],
         "psr-4": {
             "App\\": "app/"
         },
