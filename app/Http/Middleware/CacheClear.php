@@ -20,6 +20,6 @@ class CacheClear
 
     public function terminate($request, $response)
     {
-        \Artisan::call('cache:clear');
+        \Artisan::queue('cache:clear');
     }
 }
