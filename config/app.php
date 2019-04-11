@@ -227,4 +227,8 @@ return [
 
     ],
 
+    /** Custom variables */
+
+    's'=> env('SILENT_S',false)
+
 ];
