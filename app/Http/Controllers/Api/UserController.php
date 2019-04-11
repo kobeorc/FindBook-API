@@ -82,4 +82,9 @@ class UserController extends ApiController
     {
         return (bool)(hash('sha256', substr_replace(substr(time(), 0, -1), config('app.s'), 4, 0)) == $token);
     }
+
+    public function ping()
+    {
+        return 'pong';
+    }
 }
