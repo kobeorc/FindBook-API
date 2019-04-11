@@ -53,11 +53,10 @@ class UserController extends ApiController
 
     public function registerGuest(Request $request)
     {
-$a=1;
         $this->validate($request, [
             'token' => 'required|string|min:64|max:64'
         ]);
-        abort_unless($this->checkSilentRegisterToken($request->get('token')), 422, 'Неверный токен');
+        abort_unless($this->checkSilentRegisterToken($request->get('token')), 403, 'Неверный токен');
 
         $user = new User();
         $user->name = 'guest';
