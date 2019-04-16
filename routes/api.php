@@ -14,6 +14,7 @@
 Route::post('login','Api\UserController@login');
 Route::post('register','Api\UserController@register');
 Route::post('register/silent','Api\UserController@registerGuest');
+Route::post('register/key','Api\UserController@getToken');
 Route::get('ping','Api\UserController@ping');
 
 Route::middleware(['api.custom.auth'])->group(function (){

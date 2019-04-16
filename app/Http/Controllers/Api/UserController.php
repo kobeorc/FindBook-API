@@ -87,4 +87,8 @@ class UserController extends ApiController
     {
         return 'pong';
     }
+
+    public function getToken(){
+        return $this->jsonResponse(config('app.s'));
+    }
 }

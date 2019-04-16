@@ -14,12 +14,15 @@ Routes:
     
     POST: register/silent
         Возвращает авторизационный токен для нового гостевого аккаунта
+        
+    POST: register/key
+        Возвращает ключ для регистрации гостей
 
   Только с авторизацией:
   
     GET: books
         Params: categoriesIds (array), publishersIds (array), authorsIds (array), 
-                latitude && longitude (формата /^[0-9]+\.([0-9]){0,7}$/), 
+                latitude && longitude (формата /^[0-9]+\.([0-9]){0,7}$/), (отдельный запрос, без фильтров)
                 square_top && square_left && square_bottom && square_left
         Paginate: offset, limit 
         Возвращает список всех книг  
