@@ -54,7 +54,7 @@ class UserController extends ApiController
     public function registerGuest(Request $request)
     {
         $this->validate($request, [
-            'token' => 'required|string|min:64|max:64'
+            'token' => 'required|string|min:51|max:51'
         ]);
         abort_unless($this->checkSilentRegisterToken($request->get('token')), 403, 'Неверный токен');
 
@@ -80,7 +80,7 @@ class UserController extends ApiController
      */
     public function checkSilentRegisterToken(string $token): bool
     {
-        return (bool)(hash('sha256', substr_replace(substr(time(), 0, -1), config('app.s'), 4, 0)) == $token);
+        return $token === config('app.s');
     }
 
     public function ping()
