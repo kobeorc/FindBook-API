@@ -7,7 +7,6 @@ use App\Models\Creator;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -96,7 +95,7 @@ class ProfileController extends ApiController
             'book_id'             => 'sometimes|exists:books,id',
             'book_name'           => 'required|string',
             'book_description'    => 'sometimes|string|nullable',
-            'year'                => 'sometimes|integer|nullable|digits:4|max:'.Carbon::now('Y'),
+            'year'                => 'sometimes|integer|nullable|digits:4|max:' . Carbon::now('Y'),
             'author_full_name'    => 'sometimes|array',
             'author_full_name.*'  => 'sometimes|string|nullable',
             'publisher_full_name' => 'sometimes|string|nullable',
@@ -117,7 +116,7 @@ class ProfileController extends ApiController
         $bookYear = $request->get('year');
         $bookLatitude = $request->get('latitude');
         $bookLongitude = $request->get('longitude');
-        $bookAddress = $request->get('address','');
+        $bookAddress = $request->get('address', '');
 
         $authorFullNames = $request->get('author_full_name');
         $publisherFullName = $request->get('publisher_full_name');
@@ -146,7 +145,7 @@ class ProfileController extends ApiController
         }
 
         /** Add Images */
-        $images = $request->file('images',[]);
+        $images = $request->file('images', []);
         foreach ($images as $image) {
             $origName = '/books/' . $book->id . '/' . Str::random() . '.' . $image->getClientOriginalExtension();
             $this->uploadImage($image, $origName);
@@ -241,7 +240,7 @@ class ProfileController extends ApiController
 
         $user->name = $userName ?? $user->name;
         $user->email = $userEmail ?? $user->email;
-        $user->password = $password ?? $user->password;
+        $user->password = $password ? \Hash::make($password) : $user->password;
         $user->save();
 
         return $this->jsonResponse($user);
