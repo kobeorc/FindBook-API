@@ -7,7 +7,6 @@ use App\Models\Creator;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
@@ -244,7 +243,7 @@ class ProfileController extends ApiController
 
         $user->name = $userName ?? $user->name;
         $user->email = $userEmail ?? $user->email;
-        $user->password = $password ?? $user->password;
+        $user->password = $password ? \Hash::make($password) : $user->password;
         $user->save();
 
         return $this->jsonResponse($user);

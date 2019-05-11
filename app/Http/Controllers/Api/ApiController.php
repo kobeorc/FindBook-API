@@ -38,11 +38,11 @@ abstract class ApiController extends Controller
         $limit = request()->get('limit');
 
         if ($offset) {
-            $data->slice($offset);
+            $data = $data->slice($offset);
         }
 
         if ($limit) {
-            $data->take($limit);
+            $data = $data->take($limit);
         }
 
         return response()->json($data);
