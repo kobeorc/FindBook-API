@@ -94,7 +94,7 @@ class BookController extends ApiController
 
         $result = collect($booksWithLocation);
 
-        $sorted = $result->sortBy('distance');
+        $sorted = $result->sortByDesc('distance');
 
         return $sorted->values();
     }
