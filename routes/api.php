@@ -40,4 +40,9 @@ Route::middleware(['api.custom.auth'])->group(function (){
     Route::get('profile/inventory/favorite','Api\ProfileController@getFavorite');
     Route::post('profile/inventory/favorite','Api\ProfileController@putToFavorite')->middleware('cache.clear');
     Route::delete('profile/inventory/favorite/{bookId}','Api\ProfileController@deleteFromFavorite')->where(['bookId'=>'[0-9]+'])->middleware('cache.clear');
+
+    Route::post('subscribe','Api\SubscriberController@subscribe');
+    Route::post('unsubscribe','Api\SubscriberController@unsubscribe');
+    Route::get('subscribe','Api\SubscriberController@getLeading');
+    Route::get('subscribers','Api\SubscriberController@getFollowers');
 });

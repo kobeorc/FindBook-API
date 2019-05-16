@@ -60,7 +60,7 @@ class User extends Authenticatable
 
     public function favorite()
     {
-        return $this->belongsToMany(Book::class,'users_have_favorites');
+        return $this->belongsToMany(Book::class, 'users_have_favorites');
     }
 
     public function isAdmin()
@@ -76,5 +76,21 @@ class User extends Authenticatable
     public function getAvatarAttribute()
     {
         return $this->avatar()->exists() ? asset($this->avatar()->orderByDesc('id')->first()->path) : null;
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function following(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'subscribers', 'leading_id', 'follower_id');
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function followed(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'subscribers', 'follower_id', 'leading_id');
     }
 }
