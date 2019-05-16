@@ -17,7 +17,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNull('archived_at')->with(['authors', 'publishers', 'categories', 'users', 'images'])->get();
+        $books = $user->inventory()->whereNull('archived_at')->with(['authors', 'publishers', 'categories', 'users', 'images'])->orderByDesc('id')->get();
         return $this->jsonResponse($books);
     }
 
