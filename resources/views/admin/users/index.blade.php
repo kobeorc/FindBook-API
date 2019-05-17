@@ -16,7 +16,7 @@
                 <td>{{ $user->name ?? ''}}</td>
                 <td>{{ $user->email ?? ''}}</td>
                 <td>{{ $user->role ?? '' }}</td>
-                <td><a href="{{ route('users.edit',['userId'=>$user->id]) }}" class="btn btn-light">UPDATE</a></td>
+                <td><a href="{{ route('users.edit',['userId'=>$user->id]) }}" class="btn btn-light">update</a></td>
             </tr>
         @endforeach
         </tbody>

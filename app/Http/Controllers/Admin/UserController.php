@@ -11,7 +11,7 @@ class UserController extends Controller
     public function index()
     {
         /** @var User $users */
-        $users = User::paginate(20);
+        $users = User::where('role', '!=', User::ROLE_GUEST)->paginate(15);
         return view('admin.users.index', compact('users'));
     }
 
@@ -19,13 +19,13 @@ class UserController extends Controller
     {
         /** @var User $user */
         $user = User::findOrFail($userId);
-        return view('admin.users.edit',compact('user'));
+        return view('admin.users.edit', compact('user'));
     }
 
-    public function update(Request $request,$userId)
+    public function update(Request $request, $userId)
     {
-        $this->validate($request,[
-            'newPassword'=>'sometimes|min:6',
+        $this->validate($request, [
+            'newPassword' => 'sometimes|min:6',
         ]);
         /** @var User $user */
         $user = User::findOrFail($userId);

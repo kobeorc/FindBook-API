@@ -21,8 +21,9 @@
         <div class="row">
             <div class="col-md-2">
                 <div class="list-group">
-                    <a href="{{ route('users') }}" class="list-group-item list-group-item-action @if(request()->is('users*')) active @endif">Users <span class="badge badge-pill badge-dark">{{ \App\Models\User::count() }}</span></a>
+                    <a href="{{ route('users') }}" class="list-group-item list-group-item-action @if(request()->is('users*')) active @endif">Users <span class="badge badge-pill badge-dark">{{ \App\Models\User::where('role','!=',\App\Models\User::ROLE_GUEST)->count() }}</span> <span class="badge badge-pill badge-secondary">Guest {{ \App\Models\User::where('role','=',\App\Models\User::ROLE_GUEST)->count() }}</span></a>
                     <a href="{{ route('books') }}" class="list-group-item list-group-item-action @if(request()->is('books*')) active @endif ">Books <span class="badge badge-pill badge-dark">{{ \App\Models\Book::count() }}</span></a>
+                    <a href="{{ route('category') }}" class="list-group-item list-group-item-action @if(request()->is('category*')) active @endif ">Category <span class="badge badge-pill badge-dark">{{ \App\Models\Category::count() }}</span></a>
                 </div>
             </div>
             <div class="col-sm">
