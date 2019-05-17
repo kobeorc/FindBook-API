@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Models\Book;
 use App\Models\Creator;
 use App\Models\Point;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends ApiController
 {
@@ -25,6 +27,7 @@ class BookController extends ApiController
             'square_bottom'   => 'required_with:square_top,square_left,square_right',
             'latitude'        => 'required_with:longitude',
             'longitude'       => 'required_with:latitude',
+            'except_me'       => 'sometimes|boolean',
         ]);
 
         $categoriesIds = (array)request()->get('categoriesIds');
@@ -32,12 +35,15 @@ class BookController extends ApiController
         $authorsIds = (array)request()->get('authorsIds');
         $latitude = request()->get('latitude', false);
         $longitude = request()->get('longitude', false);
+        $except_me = request()->get('except_me',false);
 
         $square_top = request()->get('square_top');
         $square_left = request()->get('square_left');
         $square_right = request()->get('square_right');
         $square_bottom = request()->get('square_bottom');
 
+        /** @var User $user */
+        $user = Auth::user();
         if($cache_key = \Cache::has(\CacheHelper::getKeyCache(\request()))){
             return \Cache::get($cache_key);
         }
@@ -46,6 +52,11 @@ class BookController extends ApiController
         if ($categoriesIds) {
             $query->whereHas('categories', function ($q) use ($categoriesIds) {
                 $q->whereIn('categories.id', $categoriesIds);
+            });
+        }
+        if($except_me){
+            $query->whereDoesntHave('users',function ($query) use ($user){
+                $query->where('user_id','=',$user->id);
             });
         }
         if ($publisherIds) {

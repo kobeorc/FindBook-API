@@ -24,7 +24,7 @@
   *нужен заголовок с авторизационным токеном*
  ##Список книг
     GET: books
-        Params: categoriesIds (array), publishersIds (array), authorsIds (array), 
+        Params: categoriesIds (array), publishersIds (array), authorsIds (array), except_me (boolean)(исключает книги текущего пользователя)
                 latitude && longitude (формата /^[0-9]+\.([0-9]){0,7}$/), (отдельный запрос, без фильтров)
                 square_top && square_left && square_bottom && square_left
         Paginate: offset, limit 
