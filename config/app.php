@@ -174,6 +174,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        \LaravelFCM\FCMServiceProvider::class,
 
     ],
 
@@ -224,11 +225,12 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Image' => \Intervention\Image\Facades\Image::class,
+        'FCM' => LaravelFCM\Facades\FCM::class,
 
     ],
 
     /** Custom variables */
 
-    's'=> env('SILENT_S',false)
+    's' => env('SILENT_S', false)
 
 ];

@@ -104,3 +104,7 @@
     POST: unsubscribe
         Params: user_id(required)
         Удаляет из списка подписок пользователя
+        
+###Commands
+##Start push
+  php artisan push:send - педалька для теста пушей
