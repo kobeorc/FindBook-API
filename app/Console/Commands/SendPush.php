@@ -22,7 +22,7 @@ class SendPush extends Command
 
 //        $notification = $notificationBuilder->build();
         $topic = new Topics();
-        $topic->topic('news');
+        $topic->topic('testAddBook');
 
         /**
          * Build Custom Data
