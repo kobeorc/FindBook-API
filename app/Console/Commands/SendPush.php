@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Book;
+use App\Models\Push;
 use Illuminate\Console\Command;
 use LaravelFCM\Facades\FCM;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -16,13 +17,14 @@ class SendPush extends Command
 
     public function handle()
     {
-        $book = Book::query()->inRandomOrder()->limit(1)->first();
+        $push = Push::query()->whereStatus(Push::STATUS_PENDING)->first();
+        $book = Book::findOrFail($push->id);
 
         $custom_data = [
             'book_name' => $book->name,
             'book_author' => $book->authors()->first()->full_name,
             'book_image' => $book->images()->first()->path,
-            'count_of_new' => 3
+            'count_of_new' => $push->count,
         ];
 
         $notificationBuilder = new PayloadNotificationBuilder();
@@ -36,5 +38,8 @@ class SendPush extends Command
         $topicResponse->isSuccess();
         $topicResponse->shouldRetry();
         $topicResponse->error();
+
+        $push->status = Push::STATUS_CLOSED;
+        $push->save();
     }
 }
