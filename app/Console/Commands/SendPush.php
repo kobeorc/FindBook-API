@@ -20,9 +20,9 @@ class SendPush extends Command
 
         $custom_data = [
             'book_name' => $book->name,
-            'book_description' => $book->description,
+            'book_author' => $book->authors()->first()->full_name,
             'book_image' => $book->images()->first()->path,
-            'count' => 3
+            'count_of_new' => 3
         ];
 
         $notificationBuilder = new PayloadNotificationBuilder();
