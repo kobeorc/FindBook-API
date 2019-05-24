@@ -26,7 +26,8 @@ class SendPushTest extends Command
             'book_name' => $book->name,
             'book_author' => $authors,
             'book_image' => $images,
-            'count_of_new' => 3,
+            'count_of_new' => 5,
+            'book_ids' => [1,2,3,4,5]
         ];
 
         $notificationBuilder = new PayloadNotificationBuilder();

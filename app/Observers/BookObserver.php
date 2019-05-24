@@ -9,9 +9,11 @@ class BookObserver
 {
     public function created(Book $book)
     {
-        $push = Push::query()->firstOrCreate(['status' => Push::STATUS_PENDING]);
+        $push = Push::query()->firstOrNew(['status' => Push::STATUS_PENDING]);
         $push->count++;
-        $push->ids = $book->id;
+        $ids = collect($push->ids);
+        $ids = $ids->push($book->id)->all();
+        $push->ids = $ids;
         $push->save();
     }
 }

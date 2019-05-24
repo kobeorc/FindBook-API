@@ -6,14 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Push extends Model
 {
-    protected $table = 'push';
-
     const STATUS_PENDING = 'pending';
     const STATUS_CLOSED = 'closed';
-
+    protected $table = 'push';
     protected $fillable = [
         'ids',
         'count',
+    ];
+
+    protected $casts = [
+        'ids' => 'array',
+        'count' => 'integer',
     ];
 
 }
