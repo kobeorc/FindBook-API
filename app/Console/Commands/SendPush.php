@@ -40,7 +40,7 @@ class SendPush extends Command
         $dataBuilder->addData($custom_data);
         $data = $dataBuilder->build();
         $topic = new Topics();
-        $topic->topic('testAddBook');
+        $topic->topic('addBook');
         $topicResponse = FCM::sendToTopic($topic, null, $notification, $data);
         $topicResponse->isSuccess();
         $topicResponse->shouldRetry();
