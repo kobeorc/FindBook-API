@@ -31,6 +31,6 @@ class Image extends Model
 
     public function getPathAttribute()
     {
-        return asset($this->attributes['path']) ?? '';
+        return secure_asset($this->attributes['path']) ?? '';
     }
 }
