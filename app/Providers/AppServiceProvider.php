@@ -10,10 +10,10 @@ class AppServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        Book::observe(BookObserver::class);
     }
 
     public function register()
     {
-        Book::observe(BookObserver::class);
     }
 }
