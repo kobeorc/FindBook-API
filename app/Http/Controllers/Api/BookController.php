@@ -17,6 +17,8 @@ class BookController extends ApiController
         $this->validate(request(), [
             'categoriesIds'   => 'sometimes|array',
             'categoriesIds.*' => 'integer',
+            'bookIds'         => 'sometimes|array',
+            'bookIds.*'       => 'integer',
             'publishersIds'   => 'sometimes|array',
             'publishersIds.*' => 'integer',
             'authorsIds'      => 'sometimes|array',
@@ -36,6 +38,7 @@ class BookController extends ApiController
         $latitude = request()->get('latitude', false);
         $longitude = request()->get('longitude', false);
         $except_me = request()->get('except_me',false);
+        $book_ids = (array)request()->get('book_ids');
 
         $square_top = request()->get('square_top');
         $square_left = request()->get('square_left');
@@ -74,6 +77,9 @@ class BookController extends ApiController
         if ($square_top && $square_bottom && $square_left && $square_right) {
             $query->whereBetween('latitude', [$square_top, $square_bottom]);
             $query->whereBetween('longitude', [$square_left, $square_right]);
+        }
+        if($book_ids){
+            $query->whereIn('id',$book_ids);
         }
 
         if ($latitude && $longitude) {
