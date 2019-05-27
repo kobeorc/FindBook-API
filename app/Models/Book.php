@@ -2,13 +2,38 @@
 
 namespace App\Models;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * App\Models\Book
+ *
+ * @property-read Collection|Category[] $categories
+ * @property-read Collection|Creator[] $creators
+ * @property-read Collection|User[] $favorite
+ * @property-read mixed $archived_at
+ * @property-read mixed $is_favorite
+ * @property-read mixed $status
+ * @property-read Collection|Image[] $images
+ * @property-read Collection|User[] $users
+ * @method static bool|null forceDelete()
+ * @method static Builder|Book isActive()
+ * @method static Builder|Book isArchived()
+ * @method static Builder|Book newModelQuery()
+ * @method static Builder|Book newQuery()
+ * @method static \Illuminate\Database\Query\Builder|Book onlyTrashed()
+ * @method static Builder|Book query()
+ * @method static bool|null restore()
+ * @method static \Illuminate\Database\Query\Builder|Book withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Book withoutTrashed()
+ * @mixin Eloquent
+ */
 class Book extends Model
 {
     const DEFAULT_LATITUDE = '0.00';

@@ -2,9 +2,20 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * App\Models\UserAuthToken
+ *
+ * @property-read User $user
+ * @method static Builder|UserAuthToken newModelQuery()
+ * @method static Builder|UserAuthToken newQuery()
+ * @method static Builder|UserAuthToken query()
+ * @mixin Eloquent
+ */
 class UserAuthToken extends Model
 {
     public    $timestamps = true;
