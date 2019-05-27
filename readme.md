@@ -1,15 +1,15 @@
 <p>FindBook API</p>
 
-###Routes:
+### Routes:
 
-#Без авторизации:
+# Без авторизации:
   
-  ##Авторизация
+## Авторизация
     POST: login
         Params: email(required),passoword(required)
         При успешной авторизации в ответ придет токен для авторизации
         
-  ##Регистрация
+## Регистрация
     POST: register
         Params: email(required),name(required),password(required),password_confirmation(required)
         При успешной регистрации вернется 201 ответ сервера
@@ -20,9 +20,9 @@
     POST: register/key
         Возвращает ключ для регистрации гостей
 
-  #Только с авторизацией:
+# Только с авторизацией:
   *нужен заголовок с авторизационным токеном*
-  ##Список книг
+## Список книг
     GET: books
         Params: categoriesIds (array), publishersIds (array), authorsIds (array), except_me (boolean)(исключает книги текущего пользователя), book_ids (array)
                 latitude && longitude (формата /^[0-9]+\.([0-9]){0,7}$/), (отдельный запрос, без фильтров)
@@ -39,7 +39,7 @@
         Возвращает список книг. 
         Поиск сейчас по books.name|books.description|authors.full_name|publishers.full_name
             
-  ## Профиль пользователя
+## Профиль пользователя
     GET: profile
         Вернет текущего пользователя
 
@@ -82,15 +82,18 @@
     DELETE: profile/inventory/favorite/{bookId}
         Удаляет книгу из избранного
         
-  ##Категории
+    GET: users/{userId}/books
+        Возвращает список книг пользователя(не заархивированных)
+        
+## Категории
     GET: categories
         Возвращает список категорий
         
-  ##Провайдеры
+## Провайдеры
     GET: publishers
         Возвращает список издательств
         
-  ##Подписота
+## Подписота
     GET: subscribe
         Возвращает список подписок
         
@@ -104,19 +107,19 @@
     POST: unsubscribe
         Params: user_id(required)
         Удаляет из списка подписок пользователя
-#CHAT (In Test)
-##Добавление сообшения
+# CHAT (In Test)
+## Добавление сообшения
     POST: message/sent
         Params: chat_type(private/group/channel) , message_type(text/audio/video/file/image/combined/forward/reply), to (user_id), text(string)
         Добавляет сообщение. Сейчас работает только с chat_type = private, message_type = text 
-##Список чатов пользователя
+## Список чатов пользователя
     GET: chats
         Возвращает список доступных чатов пользователя
         
-##Список сообщений в чате
+## Список сообщений в чате
     GET: chats/{chatID}/messages
         Возвращает список сообщений в чате
-        
-###Commands
-##Start push
+
+### Commands
+## Start push
   php artisan push:send - педалька для теста пушей
