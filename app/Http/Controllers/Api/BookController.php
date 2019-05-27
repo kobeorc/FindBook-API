@@ -121,4 +121,10 @@ class BookController extends ApiController
         $book = Book::isActive()->with(['authors', 'publishers', 'categories', 'users', 'images'])->findOrFail($bookId);
         return $this->jsonResponse($book);
     }
+
+    public function showInventory($userId)
+    {
+        $user = User::findOrFail($userId);
+        return $this->jsonResponse($user->inventory()->whereNull('archived_at')->with(['authors', 'publishers', 'categories', 'users', 'images'])->orderByDesc('id')->get());
+    }
 }
