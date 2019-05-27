@@ -122,4 +122,4 @@
 
 ### Commands
 ## Start push
-  php artisan push:send - педалька для теста пушей
+  php artisan push:test - педалька для теста пушей
