@@ -5,15 +5,14 @@ namespace App\Http\Middleware;
 use App\Models\UserAuthToken;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
-class WebCustomAuth
+class WebCustomAuth extends Basic
 {
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param Closure $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
      * @return mixed
      */
     public function handle(Request $request, Closure $next)
@@ -24,7 +23,7 @@ class WebCustomAuth
         if(!$userToken = UserAuthToken::query()->whereToken($baererToken)->first())
             abort(401);
 
-        Auth::login($userToken->user);
+        \Illuminate\Support\Facades\Auth::login($userToken->user);
 
         return $next($request);
     }

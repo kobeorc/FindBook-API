@@ -104,18 +104,6 @@
     POST: unsubscribe
         Params: user_id(required)
         Удаляет из списка подписок пользователя
-#CHAT (In Test)
-##Добавление сообшения
-    POST: message/sent
-        Params: chat_type(private/group/channel) , message_type(text/audio/video/file/image/combined/forward/reply), to (user_id), text(string)
-        Добавляет сообщение. Сейчас работает только с chat_type = private, message_type = text 
-##Список чатов пользователя
-    GET: chats
-        Возвращает список доступных чатов пользователя
-        
-##Список сообщений в чате
-    GET: chats/{chatID}/messages
-        Возвращает список сообщений в чате
         
 ###Commands
 ##Start push

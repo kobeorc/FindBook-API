@@ -45,10 +45,4 @@ Route::middleware(['api.custom.auth'])->group(function (){
     Route::post('unsubscribe','Api\SubscriberController@unsubscribe');
     Route::get('subscribe','Api\SubscriberController@getLeading');
     Route::get('subscribers','Api\SubscriberController@getFollowers');
-
-    Route::post('message/sent', 'Api\ChatController@store');
-    Route::get('chats', 'Api\ChatController@getUsersPrivateChats');
-    Route::get('chats/{chatId}/messages', 'Api\ChatController@getUserPrivateMessages')->where(['chatId' => '[0-9]+']);
-
-
 });
