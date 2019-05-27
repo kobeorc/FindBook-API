@@ -2,9 +2,23 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
+/**
+ * App\Models\Image
+ *
+ * @property-read Collection|Book[] $books
+ * @property-read mixed $path
+ * @property-read Collection|User[] $user
+ * @method static Builder|Image newModelQuery()
+ * @method static Builder|Image newQuery()
+ * @method static Builder|Image query()
+ * @mixin Eloquent
+ */
 class Image extends Model
 {
     public    $timestamps = true;

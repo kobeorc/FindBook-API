@@ -2,9 +2,26 @@
 
 namespace App\Models;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder;
 
+/**
+ * App\Models\Category
+ *
+ * @property-read Collection|Book[] $books
+ * @method static bool|null forceDelete()
+ * @method static \Illuminate\Database\Eloquent\Builder|Category newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Category newQuery()
+ * @method static Builder|Category onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|Category query()
+ * @method static bool|null restore()
+ * @method static Builder|Category withTrashed()
+ * @method static Builder|Category withoutTrashed()
+ * @mixin Eloquent
+ */
 class Category extends Model
 {
     use SoftDeletes;
