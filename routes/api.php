@@ -49,6 +49,4 @@ Route::middleware(['api.custom.auth'])->group(function (){
     Route::post('message/sent', 'Api\ChatController@store');
     Route::get('chats', 'Api\ChatController@getUsersPrivateChats');
     Route::get('chats/{chatId}/messages', 'Api\ChatController@getUserPrivateMessages')->where(['chatId' => '[0-9]+']);
-
-
 });
