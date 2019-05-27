@@ -28,5 +28,6 @@ Route::middleware(['auth.basic','admin.only'])->group(function (){
     Route::post('category','Admin\CategoryController@store')->name('category.store');
     Route::get('category/{categoryId}','Admin\CategoryController@edit')->where(['categoryId'=>'[0-9]+'])->name('category.edit');
     Route::post('category/{categoryId}','Admin\CategoryController@update')->where(['categoryId'=>'[0-9]+'])->name('category.update');
-//    Route::delete('category/{categoryId}','Admin\CategoryController@destroy')->where(['categoryId'=>'[0-9]+'])->name('category.destroy');
+    Route::delete('category/{categoryId}','Admin\CategoryController@destroy')->where(['categoryId'=>'[0-9]+'])->name('category.destroy');
+    Route::post('category/{categoryId}/restore','Admin\CategoryController@restore')->where(['categoryId'=>'[0-9]+'])->name('category.restore');
 });

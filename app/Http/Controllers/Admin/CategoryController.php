@@ -11,7 +11,7 @@ class CategoryController extends Controller
 {
     public function index(): View
     {
-        $categories = Category::paginate(15);
+        $categories = Category::withTrashed()->paginate(15);
 
         return view('admin.categories.index', compact('categories'));
     }
@@ -59,8 +59,13 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($categoryId);
         $category->delete();
+        return redirect()->route('category');
+    }
 
-        $categories = Category::paginate(15);
-        return view('admin.categories.index', compact('categories'));
+    public function restore($categoryId)
+    {
+        $category = Category::withTrashed()->findOrFail($categoryId);
+        $category->restore();
+        return redirect()->route('category');
     }
 }

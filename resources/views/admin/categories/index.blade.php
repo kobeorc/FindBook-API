@@ -15,6 +15,20 @@
                 <td>{{ $category->id ?? '' }}</td>
                 <td>{{ $category->name ?? ''}}</td>
                 <td><a href="{{ route('category.edit',['categoryId'=>$category->id]) }}" class="btn btn-light">update</a></td>
+                <td>
+                    @if($category->deleted_at === null)
+                        <form action="{{ route('category.destroy',['categoryId'=>$category->id]) }}" method="post">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="_method" value="delete" />
+                            <input class="btn btn-danger" type="submit" value="delete" />
+                        </form>
+                    @elseif($category->deleted_at !== null)
+                        <form action="{{ route('category.restore',['categoryId'=>$category->id]) }}" method="post">
+                            {{ csrf_field() }}
+                            <input class="btn btn-success" type="submit" value="restore" />
+                        </form>
+                    @endif
+                </td>
             </tr>
         @endforeach
         </tbody>
