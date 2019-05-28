@@ -111,7 +111,8 @@ class ChatController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        abort_unless($chat->users()->where('user_id',$user->id)->exists(),404,'Пользователя нет в этом чате');
+        abort_unless($chat->users()->where('user_id', $user->id)->exists(), 400, 'Пользователя нет в этом чате');
+        abort_unless($chatMessage->author->id === $user->id, 400, 'Пользователей не автор сообщения');
 
         $chatMessage->status = ChatMessage::STATUS_SENT;
         $chatMessage->save();
@@ -123,7 +124,8 @@ class ChatController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        abort_unless($chat->users()->where('user_id',$user->id)->exists(),404,'Пользователя нет в этом чате');
+        abort_unless($chat->users()->where('user_id', $user->id)->exists(), 400, 'Пользователя нет в этом чате');
+        abort_if($chatMessage->author->id === $user->id, 400, 'Пользователей автор сообщения');
 
         $chatMessage->status = ChatMessage::STATUS_READ;
         $chatMessage->save();
