@@ -49,17 +49,13 @@ class ChatController extends ApiController
                 /**
                  * wtf TODO refactor
                  */
-                $chats = $user->chats()
+                $chat = $user->chats()
                     ->where('type', Chat::TYPE_PRIVATE)
-                    ->get()
-                    ->map(function ($query) {
-                        return $query->id;
-                    });
-
-                $chat = Chat::query()
-                    ->whereIn('id', $chats)
+                    ->whereHas('users', function ($query) use ($user) {
+                        $query->where('user_id', $user->id);
+                    })
                     ->whereHas('users', function ($query) use ($to) {
-                        return $query->where('user_id', $to->id);
+                        $query->where('user_id',$to->id);
                     })
                     ->first();
 
