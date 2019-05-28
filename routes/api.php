@@ -30,8 +30,8 @@ Route::middleware(['api.custom.auth'])->group(function (){
 
     Route::get('profile/inventory','Api\ProfileController@inventory');
     Route::post('profile/inventory','Api\ProfileController@putToInventory')->middleware('cache.clear');
-    Route::delete('profile/inventory/{bookId}','Api\ProfileController@deleteFromInventory')->where(['bookId'=>'[0-9]'])->middleware('cache.clear');
-    Route::delete('profile/inventory/{bookId}/images/{imageId}','Api\ProfileController@deleteImageFromBook')->where(['bookId'=>'[0-9]','imageId'=>'[0-9]'])->middleware('cache.clear');
+    Route::delete('profile/inventory/{bookId}','Api\ProfileController@deleteFromInventory')->where(['bookId'=>'[0-9]+'])->middleware('cache.clear');
+    Route::delete('profile/inventory/{bookId}/images/{imageId}','Api\ProfileController@deleteImageFromBook')->where(['bookId'=>'[0-9]+','imageId'=>'[0-9]+'])->middleware('cache.clear');
 
     Route::get('profile/inventory/archive','Api\ProfileController@archive');
     Route::post('profile/inventory/archive','Api\ProfileController@putToArchive')->middleware('cache.clear');
@@ -49,6 +49,8 @@ Route::middleware(['api.custom.auth'])->group(function (){
     Route::post('message/sent', 'Api\ChatController@store');
     Route::get('chats', 'Api\ChatController@getUsersPrivateChats');
     Route::get('chats/{chatId}/messages', 'Api\ChatController@getUserPrivateMessages')->where(['chatId' => '[0-9]+']);
+    Route::post('chats/{chat}/messages/{chatMessage}/sent', 'Api\ChatController@markMessageAsSent')->where(['chat' => '[0-9]+', 'chatMessage' => '[0-9]+']);
+    Route::post('chats/{chat}/messages/{chatMessage}/read', 'Api\ChatController@markMessageAsRead')->where(['chat' => '[0-9]+', 'chatMessage' => '[0-9]+']);
 
     Route::get('users/{userId}/books','Api\BookController@showInventory')->where(['userId'=>'[0-9]+']);
 });

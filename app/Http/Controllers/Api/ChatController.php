@@ -106,4 +106,28 @@ class ChatController extends ApiController
         $chatMessages = ChatMessage::query()->with(['author'])->where('chat_id', $chatId)->get();
         return $this->jsonResponse($chatMessages);
     }
+
+    public function markMessageAsSent(Request $request, Chat $chat, ChatMessage $chatMessage)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        abort_unless($chat->users()->where('user_id',$user->id)->exists(),404,'Пользователя нет в этом чате');
+
+        $chatMessage->status = ChatMessage::STATUS_SENT;
+        $chatMessage->save();
+
+        return $this->jsonResponse([]);
+    }
+
+    public function markMessageAsRead(Request $request,Chat $chat, ChatMessage $chatMessage)
+    {
+        /** @var User $user */
+        $user = Auth::user();
+        abort_unless($chat->users()->where('user_id',$user->id)->exists(),404,'Пользователя нет в этом чате');
+
+        $chatMessage->status = ChatMessage::STATUS_READ;
+        $chatMessage->save();
+
+        return $this->jsonResponse([]);
+    }
 }

@@ -119,6 +119,14 @@
 ## Список сообщений в чате
     GET: chats/{chatId}/messages
         Возвращает список сообщений в чате
+        
+## Поставить статус отправлено
+    POST: chats/{chatId}/messages/{messageId}/sent
+        Устанавливает статус сообщения в 'sent'
+        
+## Поставить статус прочитано
+    POST: chats/{chatId}/messages/{messageId}/read
+        Устанавливает статус сообщения в 'read'
 
 ### Commands
 ## Start push
