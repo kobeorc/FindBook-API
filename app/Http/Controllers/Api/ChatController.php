@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\MessageCreated;
 use App\Models\Chat\Chat;
 use App\Models\Chat\ChatMessage;
 use App\Models\User;
@@ -91,7 +92,9 @@ class ChatController extends ApiController
         $chatMessage->status = ChatMessage::STATUS_SENDING;
         $chatMessage->type = ChatMessage::TYPE_TEXT;
         $chatMessage->text = $text;
-        return $chatMessage->save();
+        $chatMessage->save();
+        broadcast(new MessageCreated($chatMessage));
+        return true;
     }
 
     public function getUsersPrivateChats()
