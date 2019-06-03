@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Book;
+use App\Models\Push;
 use Illuminate\Console\Command;
 use LaravelFCM\Facades\FCM;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -18,6 +19,7 @@ class SendPushTest extends Command
     public function handle()
     {
         $book = Book::query()->inRandomOrder()->limit(1)->first();
+        $push = Push::query()->find(3);
 
         $authors = $book->authors()->exists() ? implode($book->authors->map(function ($item) {return $item->full_name;})->all(), ', ') : '';
         $images = $book->images()->exists() ? $book->images()->first()->path : '';
@@ -26,8 +28,8 @@ class SendPushTest extends Command
             'book_name' => $book->name,
             'book_author' => $authors,
             'book_image' => $images,
-            'count_of_new' => 5,
-            'book_ids' => json_encode([1,2,3,4,5]),
+            'count_of_new' => $push->count ?? 0,
+            'book_ids' => $push->ids,
         ];
 
         $notificationBuilder = new PayloadNotificationBuilder();
