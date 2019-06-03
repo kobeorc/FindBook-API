@@ -31,7 +31,7 @@ class SendPush extends Command
             'book_author'   => $authors,
             'book_image'    => $images,
             'count_of_new'  => $push->count ?? 0,
-            'book_ids'      => $push->ids,
+            'book_ids'      => json_encode($push->ids),
         ];
 
         $notificationBuilder = new PayloadNotificationBuilder();
