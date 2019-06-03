@@ -12,15 +12,17 @@ class SearchController extends ApiController
         $string = $request->get('search', '');
 
         $query = Book::isActive()
-                     ->where('name', 'like', '%' . $string . '%')
-                     ->orWhere('description', 'like', '%' . $string . '%')
-                     ->orWhereHas('authors', function ($query) use ($string) {
-                         $query->where('full_name', 'like', '%' . $string . '%');
-                     })
-                     ->orWhereHas('publishers', function ($query) use ($string) {
-                         $query->where('full_name', 'like', '%' . $string . '%');
-                     })
-                     ->with(['authors', 'publishers', 'categories', 'users', 'images']);
+            ->where(function ($query) use ($string) {
+                $query->where('name', 'like', '%' . $string . '%')
+                    ->orWhere('description', 'like', '%' . $string . '%')
+                    ->orWhereHas('authors', function ($query) use ($string) {
+                        $query->where('full_name', 'like', '%' . $string . '%');
+                    })
+                    ->orWhereHas('publishers', function ($query) use ($string) {
+                        $query->where('full_name', 'like', '%' . $string . '%');
+                    });
+            })
+            ->with(['authors', 'publishers', 'categories', 'users', 'images']);
 
         return $this->jsonPaginateResponse($query);
 
