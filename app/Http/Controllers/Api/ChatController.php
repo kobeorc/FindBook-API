@@ -28,7 +28,7 @@ class ChatController extends ApiController
 
         switch ($request->get('chat_type')) {
             case Chat::TYPE_PRIVATE:
-                $this->storePrivateMessage(
+                $message = $this->storePrivateMessage(
                     $request->get('message_type'),
                     User::findOrFail($request->get('to')),
                     $request->get('text')
@@ -37,6 +37,8 @@ class ChatController extends ApiController
             default:
                 abort(400, 'Не поддерживаемый тип чата');
         }
+
+        return $this->jsonResponse([$message]);
     }
 
     protected function storePrivateMessage(string $type, User $to, string $text)
@@ -73,9 +75,7 @@ class ChatController extends ApiController
 
                 }
 
-                $this->storeTextMessage($chat, $text, $user);
-
-                return $this->jsonResponse([]);
+                return $this->storeTextMessage($chat, $text, $user);
 
                 break;
             default:
@@ -91,7 +91,10 @@ class ChatController extends ApiController
         $chatMessage->status = ChatMessage::STATUS_SENDING;
         $chatMessage->type = ChatMessage::TYPE_TEXT;
         $chatMessage->text = $text;
-        return $chatMessage->save();
+        $chatMessage->save();
+        $result = ChatMessage::with(['author'])->findOrFail($chatMessage->id);
+
+        return $result;
     }
 
     public function getUsersPrivateChats()
