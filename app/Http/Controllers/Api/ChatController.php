@@ -106,8 +106,8 @@ class ChatController extends ApiController
 
     public function getUserPrivateMessages($chatId)
     {
-        $chatMessages = ChatMessage::query()->with(['author'])->where('chat_id', $chatId)->get();
-        return $this->jsonResponse($chatMessages);
+        $chatMessages = ChatMessage::query()->with(['author'])->where('chat_id', $chatId);
+        return $this->jsonPaginateResponse($chatMessages);
     }
 
     public function markMessageAsSent(Request $request, Chat $chat, ChatMessage $chatMessage)
