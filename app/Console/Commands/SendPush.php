@@ -21,7 +21,7 @@ class SendPush extends Command
         if (!$push)
             return;
 
-        $book = Book::findOrFail($push->id);
+        $book = Book::isActive()->orderByDesc('id')->get()->first();
 
         $authors = $book->authors()->exists() ? implode($book->authors->map(function ($item) {return $item->full_name;})->all(), ', ') : '';
         $images = $book->images()->exists() ? $book->images()->first()->path : '';

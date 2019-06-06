@@ -118,7 +118,7 @@ class BookController extends ApiController
 
     public function show(Request $request, $bookId)
     {
-        $book = Book::isActive()->with(['authors', 'publishers', 'categories', 'users', 'images'])->findOrFail($bookId);
+        $book = Book::with(['authors', 'publishers', 'categories', 'users', 'images'])->findOrFail($bookId);
         return $this->jsonResponse($book);
     }
 
