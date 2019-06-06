@@ -38,6 +38,14 @@ class ProfileController extends ApiController
         return $this->jsonResponse($books);
     }
 
+    public function archiveById($bookId)
+    {
+        $user = Auth::user();
+        $book = $user->inventory()->whereNotNull('archived_at')->with(['authors', 'publishers', 'categories', 'users', 'images'])->findOrFail($bookId);
+
+        return $this->jsonResponse($book);
+    }
+
     public function putToArchive(Request $request)
     {
         /** @var User $user */

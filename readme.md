@@ -64,7 +64,10 @@
     
     GET: profile/inventory/archive
         Возвращает список книг в архиве
-
+    
+    GET: profile/inventory/archive/{bookId}
+        Возвращает книгу из архива по id
+            
     POST: profile/inventory/archive
         Params: book_id
         Добавляет книгу из инвентаря в архив. при повторном добавление одной и тойже книги будет обновляться время добавления

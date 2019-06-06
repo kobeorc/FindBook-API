@@ -34,6 +34,7 @@ Route::middleware(['api.custom.auth'])->group(function (){
     Route::delete('profile/inventory/{bookId}/images/{imageId}','Api\ProfileController@deleteImageFromBook')->where(['bookId'=>'[0-9]+','imageId'=>'[0-9]+'])->middleware('cache.clear');
 
     Route::get('profile/inventory/archive','Api\ProfileController@archive');
+    Route::get('profile/inventory/archive/{bookId}','Api\ProfileController@archiveById')->where(['bookId'=>'[0-9]+']);
     Route::post('profile/inventory/archive','Api\ProfileController@putToArchive')->middleware('cache.clear');
     Route::delete('profile/inventory/archive/{bookId}','Api\ProfileController@deleteFromArchive')->where(['bookId'=>'[0-9]+'])->middleware('cache.clear');
 
