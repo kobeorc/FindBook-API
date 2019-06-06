@@ -12,26 +12,36 @@ use LaravelFCM\Message\Topics;
 
 class SendPush extends Command
 {
-    protected $signature = 'push:send';
+    protected $signature   = 'push:send';
     protected $description = 'Send pushes about new books in app';
 
     public function handle()
     {
         $push = Push::query()->whereStatus(Push::STATUS_PENDING)->first();
-        if (!$push)
+        if (!$push) {
             return;
+        }
 
         $book = Book::isActive()->orderByDesc('id')->get()->first();
+        $result = [];
+        foreach ($push->ids as $id) {
+            $book = Book::find($id);
+            if (!$book->archived_at) {
+                $result[] = $id;
+            }
+        }
 
-        $authors = $book->authors()->exists() ? implode($book->authors->map(function ($item) {return $item->full_name;})->all(), ', ') : '';
+        $authors = $book->authors()->exists() ? implode($book->authors->map(function ($item) {
+            return $item->full_name;
+        })->all(), ', ') : '';
         $images = $book->images()->exists() ? $book->images()->first()->path : '';
 
         $custom_data = [
-            'book_name'     => $book->name ?? '',
-            'book_author'   => $authors,
-            'book_image'    => $images,
-            'count_of_new'  => $push->count ?? 0,
-            'book_ids'      => $push->ids,
+            'book_name'    => $book->name ?? '',
+            'book_author'  => $authors,
+            'book_image'   => $images,
+            'count_of_new' => count($result),
+            'book_ids'     => $result,
         ];
 
         $notificationBuilder = new PayloadNotificationBuilder();
