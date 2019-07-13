@@ -74,6 +74,12 @@ class UserController extends ApiController
 
     }
 
+    public function getUserInfo(Request $request, int $user_id)
+    {
+        $user = User::findOrFail($user_id);
+        return $this->jsonResponse($user);
+    }
+
     /**
      * @param $token
      * @return bool

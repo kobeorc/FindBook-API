@@ -53,5 +53,6 @@ Route::middleware(['api.custom.auth'])->group(function (){
     Route::post('chats/{chat}/messages/{chatMessage}/sent', 'Api\ChatController@markMessageAsSent')->where(['chat' => '[0-9]+', 'chatMessage' => '[0-9]+']);
     Route::post('chats/{chat}/messages/{chatMessage}/read', 'Api\ChatController@markMessageAsRead')->where(['chat' => '[0-9]+', 'chatMessage' => '[0-9]+']);
 
+    Route::get('users/{userId}','Api\UserController@getUserInfo')->where(['userId'=>'[0-9]+']);
     Route::get('users/{userId}/books','Api\BookController@showInventory')->where(['userId'=>'[0-9]+']);
 });
