@@ -18,18 +18,19 @@ class SendPush extends Command
     public function handle()
     {
         $push = Push::query()->whereStatus(Push::STATUS_PENDING)->first();
+
         if (!$push) {
             return;
         }
 
         $book = Book::isActive()->orderByDesc('id')->get()->first();
         $result = [];
-        foreach ($push->ids as $id) {
-            $book = Book::find($id);
-            if (!$book->archived_at) {
-                $result[] = $id;
-            }
-        }
+//        foreach ($push->ids as $id) {
+//            $book = Book::find($id);
+//            if (!$book->archived_at) {
+//                $result[] = $id;
+//            }
+//        }
 
         $authors = $book->authors()->exists() ? implode($book->authors->map(function ($item) {
             return $item->full_name;
@@ -40,8 +41,10 @@ class SendPush extends Command
             'book_name'    => $book->name ?? '',
             'book_author'  => $authors,
             'book_image'   => $images,
-            'count_of_new' => count($result),
-            'book_ids'     => $result,
+            //            'count_of_new' => count($result),
+            //            'book_ids'     => $result,
+            'count_of_new' => $push->count,
+            'book_ids'     => $push->ids,
         ];
 
         $notificationBuilder = new PayloadNotificationBuilder();
