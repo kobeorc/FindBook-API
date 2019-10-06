@@ -22,7 +22,7 @@ class SearchController extends ApiController
                         $query->where('full_name', 'like', '%' . $string . '%');
                     });
             })
-            ->with(['authors', 'publishers', 'categories', 'users', 'images']);
+            ->apiScope();
 
         return $this->jsonPaginateResponse($query);
 

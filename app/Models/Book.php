@@ -128,12 +128,12 @@ class Book extends Model
         return $this->pivot->archived_at ?? false;
     }
 
-    public function getStatusAttribute()
+    public function getStatusAttribute():string
     {
         return $this->archived_at ? self::STATUS_ARCHIVED : self::STATUS_ACTIVE;
     }
 
-    public function getIsFavoriteAttribute()
+    public function getIsFavoriteAttribute(): bool
     {
         return $this->favorite()->whereUserId(Auth::user()->id)->exists();
     }
@@ -144,7 +144,7 @@ class Book extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeIsArchived(Builder $query)
+    public function scopeIsArchived(Builder $query): Builder
     {
         $pivot = $this->users()->getTable();
 
@@ -157,12 +157,17 @@ class Book extends Model
      * @param Builder $query
      * @return Builder
      */
-    public function scopeIsActive(Builder $query)
+    public function scopeIsActive(Builder $query): Builder
     {
         $pivot = $this->users()->getTable();
 
         return $query->whereHas('users', function ($q) use ($pivot) {
             $q->whereNull("{$pivot}.archived_at");
         });
+    }
+
+    public function scopeApiScope(Builder $query): Builder
+    {
+        return $query->with(['authors', 'publishers', 'categories', 'users', 'images']);
     }
 }

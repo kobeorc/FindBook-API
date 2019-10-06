@@ -2,30 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\ChatStoreRequest;
 use App\Models\Chat\Chat;
 use App\Models\Chat\ChatMessage;
 use App\Models\User;
-use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class ChatController extends ApiController
 {
-    public function store(Request $request)
+    public function store(ChatStoreRequest $request)
     {
-        $this->validate($request, [
-            'chat_type' => [
-                'required',
-                Rule::in(Chat::TYPES),
-            ],
-            'message_type' => [
-                'required',
-                Rule::in(ChatMessage::TYPES),
-            ],
-            'text' => 'required|string',
-            'to' => 'required',
-        ]);
-
         switch ($request->get('chat_type')) {
             case Chat::TYPE_PRIVATE:
                 $message = $this->storePrivateMessage(

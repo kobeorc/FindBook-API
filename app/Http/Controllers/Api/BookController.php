@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\BookIndexRequest;
 use App\Models\Book;
 use App\Models\Creator;
 use App\Models\Point;
@@ -12,54 +13,31 @@ use Illuminate\Support\Facades\Auth;
 
 class BookController extends ApiController
 {
-    public function index()
+    public function index(BookIndexRequest $request)
     {
-        $this->validate(request(), [
-            'categoriesIds'   => 'sometimes|array',
-            'categoriesIds.*' => 'integer',
-            'bookIds'         => 'sometimes|array',
-            'bookIds.*'       => 'integer',
-            'publishersIds'   => 'sometimes|array',
-            'publishersIds.*' => 'integer',
-            'authorsIds'      => 'sometimes|array',
-            'authorsIds.*'    => 'integer',
-            'square_top'      => 'required_with:square_left,square_bottom,square_right',
-            'square_left'     => 'required_with:square_top,square_bottom,square_right',
-            'square_right'    => 'required_with:square_top,square_bottom,square_left',
-            'square_bottom'   => 'required_with:square_top,square_left,square_right',
-            'latitude'        => 'required_with:longitude',
-            'longitude'       => 'required_with:latitude',
-            'except_me'       => 'sometimes|boolean',
-        ]);
+        $categoriesIds = (array)$request->get('categoriesIds');
+        $publisherIds = (array)$request->get('publishersIds');
+        $authorsIds = (array)$request->get('authorsIds');
+        $latitude = $request->get('latitude', false);
+        $longitude = $request->get('longitude', false);
+        $except_me = $request->get('except_me',false);
+        $book_ids = (array)$request->get('book_ids');
 
-        $categoriesIds = (array)request()->get('categoriesIds');
-        $publisherIds = (array)request()->get('publishersIds');
-        $authorsIds = (array)request()->get('authorsIds');
-        $latitude = request()->get('latitude', false);
-        $longitude = request()->get('longitude', false);
-        $except_me = request()->get('except_me',false);
-        $book_ids = (array)request()->get('book_ids');
+        $square_top = $request->get('square_top');
+        $square_left = $request->get('square_left');
+        $square_right = $request->get('square_right');
+        $square_bottom = $request->get('square_bottom');
 
-        $square_top = request()->get('square_top');
-        $square_left = request()->get('square_left');
-        $square_right = request()->get('square_right');
-        $square_bottom = request()->get('square_bottom');
-
-        /** @var User $user */
-        $user = Auth::user();
-        if($cache_key = \Cache::has(\CacheHelper::getKeyCache(\request()))){
-            return \Cache::get($cache_key);
-        }
         /** @var Builder $query */
-        $query = Book::isActive()->with(['authors', 'publishers', 'categories', 'users', 'images'])->orderByDesc('id');
+        $query = Book::isActive()->apiScope()->orderByDesc('id');
         if ($categoriesIds) {
             $query->whereHas('categories', function ($q) use ($categoriesIds) {
                 $q->whereIn('categories.id', $categoriesIds);
             });
         }
         if($except_me){
-            $query->whereDoesntHave('users',function ($query) use ($user){
-                $query->where('user_id','=',$user->id);
+            $query->whereDoesntHave('users',function ($query){
+                $query->where('user_id','=',Auth::user()->id);
             });
         }
         if ($publisherIds) {
@@ -118,13 +96,13 @@ class BookController extends ApiController
 
     public function show(Request $request, $bookId)
     {
-        $book = Book::with(['authors', 'publishers', 'categories', 'users', 'images'])->findOrFail($bookId);
+        $book = Book::apiScope()->findOrFail($bookId);
         return $this->jsonResponse($book);
     }
 
     public function showInventory($userId)
     {
         $user = User::findOrFail($userId);
-        return $this->jsonResponse($user->inventory()->whereNull('archived_at')->with(['authors', 'publishers', 'categories', 'users', 'images'])->orderByDesc('id')->get());
+        return $this->jsonResponse($user->inventory()->whereNull('archived_at')->apiScope()->orderByDesc('id')->get());
     }
 }

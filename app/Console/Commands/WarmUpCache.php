@@ -24,7 +24,7 @@ class WarmUpCache extends Command
 
         while ($offset < self::COUNT_ITEMS) {
             /** @var Builder $query */
-            $query = Book::isActive()->with(['authors', 'publishers', 'categories', 'users', 'images'])->orderByDesc('id');
+            $query = Book::isActive()->apiScope()->orderByDesc('id');
             $items = $query->limit($limit)->offset($offset)->get();
             $request = collect(['limit' => $limit, 'offset' => $offset]);
             \Cache::put(\CacheHelper::getKeyCache($request), $items, 10);
