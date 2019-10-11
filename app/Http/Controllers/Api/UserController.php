@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\UserLoginRequest;
+use App\Http\Requests\UserRegisterRequest;
+use App\Http\Requests\UserRegisterGuestRequest;
 use App\Models\User;
 use App\Models\UserAuthToken;
 use Illuminate\Http\Request;
@@ -10,13 +13,8 @@ use Illuminate\Support\Str;
 
 class UserController extends ApiController
 {
-    public function login(Request $request)
+    public function login(UserLoginRequest $request)
     {
-        $this->validate($request, [
-            'email'    => 'required|string|email|max:255|exists:users',
-            'password' => 'required|string|max:255',
-        ]);
-
         /** @var User $user */
         $user = User::query()->whereEmail($request->get('email'))->first();
 
@@ -31,14 +29,8 @@ class UserController extends ApiController
         return $this->jsonResponse($auth_token);
     }
 
-    public function register(Request $request)
+    public function register(UserRegisterRequest $request)
     {
-        $this->validate($request, [
-            'name'     => 'required|string|max:255',
-            'email'    => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
-        ]);
-
         $user = new User();
         $user->name = $request->get('name');
         $user->email = $request->get('email');
@@ -51,12 +43,9 @@ class UserController extends ApiController
         return response()->make('', 201);
     }
 
-    public function registerGuest(Request $request)
+    public function registerGuest(UserRegisterGuestRequest $request)
     {
-        $this->validate($request, [
-            'token' => 'required|string|min:51|max:51'
-        ]);
-        abort_unless($this->checkSilentRegisterToken($request->get('token')), 403, 'Неверный токен');
+        abort_unless($this->checkSilentRegisterToken($request->get('token')), 403, 'Неверный токен');// TODO move to validate
 
         $user = new User();
         $user->name = 'guest';

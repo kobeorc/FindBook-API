@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\ProfilePutToInventoryRequest;
 use App\Models\Book;
 use App\Models\Creator;
 use App\Models\User;
@@ -17,7 +18,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNull('archived_at')->with(['authors', 'publishers', 'categories', 'users', 'images'])->orderByDesc('id')->get();
+        $books = $user->inventory()->whereNull('archived_at')->apiScope()->orderByDesc('id')->get();
         return $this->jsonResponse($books);
     }
 
@@ -33,7 +34,7 @@ class ProfileController extends ApiController
     {
         /** @var User $user */
         $user = Auth::user();
-        $books = $user->inventory()->whereNotNull('archived_at')->with(['authors', 'publishers', 'categories', 'users', 'images'])->get();
+        $books = $user->inventory()->whereNotNull('archived_at')->apiScope()->get();
 
         return $this->jsonResponse($books);
     }
@@ -41,7 +42,7 @@ class ProfileController extends ApiController
     public function archiveById($bookId)
     {
         $user = Auth::user();
-        $book = $user->inventory()->whereNotNull('archived_at')->with(['authors', 'publishers', 'categories', 'users', 'images'])->findOrFail($bookId);
+        $book = $user->inventory()->whereNotNull('archived_at')->apiScope()->findOrFail($bookId);
 
         return $this->jsonResponse($book);
     }
@@ -80,7 +81,7 @@ class ProfileController extends ApiController
         /** @var User $user */
         $user = Auth::user();
 
-        $favorites = $user->favorite()->with(['authors', 'publishers', 'categories', 'users', 'images'])->get();
+        $favorites = $user->favorite()->apiScope()->get();
 
         return $this->jsonResponse($favorites);
     }
@@ -97,24 +98,8 @@ class ProfileController extends ApiController
         return response('', 200);
     }
 
-    public function putToInventory(Request $request)
+    public function putToInventory(ProfilePutToInventoryRequest $request)
     {
-        $this->validate($request, [
-            'book_id'             => 'sometimes|exists:books,id',
-            'book_name'           => 'required|string',
-            'book_description'    => 'sometimes|string|nullable',
-            'year'                => 'sometimes|integer|nullable|digits:4|max:' . Carbon::now('Y'),
-            'author_full_name'    => 'sometimes|array',
-            'author_full_name.*'  => 'sometimes|string|nullable',
-            'publisher_full_name' => 'sometimes|string|nullable',
-            'categories_ids'      => 'sometimes|array',
-            'categories_ids.*'    => 'sometimes|exists:categories,id|nullable',
-            'images'              => 'sometimes|array',
-            'images.*'            => 'sometimes|image',
-            'latitude'            => 'required_with:longitude|regex:/^\-?[0-9]+\.([0-9]){0,7}$/',
-            'longitude'           => 'required_with:latitude|regex:/^\-?[0-9]+\.([0-9]){0,7}$/',
-            'address'             => 'sometimes|string',
-        ]);
         /** @var User $user */
         $user = Auth::user();
 
@@ -220,13 +205,6 @@ class ProfileController extends ApiController
 
     public function updateProfile(Request $request)
     {
-        $this->validate($request, [
-            'avatar'   => 'image|mimes:jpeg,jpg,png,gif',
-            'name'     => 'sometimes|string|max:255',
-            'email'    => 'sometimes|email|unique:users|max:255',
-            'password' => 'sometimes|min:6|confirmed|string',
-        ]);
-
         /** @var User $user */
         $user = Auth::user();
         $userName = $request->get('name');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\SubscribeRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -12,11 +13,8 @@ class SubscriberController extends ApiController
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function subscribe(Request $request)
+    public function subscribe(SubscribeRequest $request)
     {
-        $this->validate($request,[
-            'user_id'=> 'required|integer'
-        ]);
         /** @var integer $leading_user_id */
         $leading_user_id = $request->get('user_id');
         User::findOrFail($leading_user_id);
@@ -33,15 +31,12 @@ class SubscriberController extends ApiController
      * @return \Illuminate\Http\JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function unSubscribe(Request $request)
+    public function unSubscribe(SubscribeRequest $request)
     {
-        $this->validate($request,[
-            'user_id'=> 'required|integer'
-        ]);
 
         $user = \Auth::user();
         $leading_user_id = $request->get('user_id');
-        abort_if(!$user->following()->where('leading_id','=',$leading_user_id)->exists(),404,'User Not Followed');
+        abort_if(!$user->following()->where('leading_id', '=', $leading_user_id)->exists(), 404, 'User Not Followed');
 
         $user->following()->detach($leading_user_id);
 
