@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Acceptance\helpers;
+namespace Tests\Acceptance\Structures;
 
-class PublisherStructure extends AbstractStructure
+class AuthorsStructure extends AbstractStructure
 {
     public static $structure = [
         'id',

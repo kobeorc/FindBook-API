@@ -91,6 +91,10 @@ class BookController extends ApiController
 
         $sorted = $result->sortBy('distance');
 
+        foreach ($sorted as $item)
+        {
+            unset($item->distance);
+        }
         return $sorted->values();
     }
 

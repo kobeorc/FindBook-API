@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Acceptance\helpers;
+namespace Tests\Acceptance\Structures;
 
 class BookStructure extends AbstractStructure
 {
@@ -28,12 +28,12 @@ class BookStructure extends AbstractStructure
         'id'          => 'integer',
         'name'        => 'string',
         'description' => 'string',
-        'latitude'    => 'float',
+        'latitude'    => 'double',
         'longitude'   => 'double',
         'address'     => 'string',
         'year'        => 'integer',
         'updated_at'  => 'string',
-        'archived_at' => 'string',
+        'archived_at' => 'string|boolean',
         'status'      => 'string',
         'is_favorite' => 'boolean',
         'authors'     => 'array',

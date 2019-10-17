@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Acceptance\helpers;
+namespace Tests\Acceptance\Structures;
 
 class ImagesStructure extends AbstractStructure
 {

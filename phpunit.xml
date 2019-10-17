@@ -33,5 +33,6 @@
         <env name="MAIL_DRIVER" value="array"/>
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
+        <env name="SILENT_S" value="JngN3oxfiKoDatO6fTea7ooB9pLhxIX2ndRw6ZOe4NPQFtzP6G2"/>
     </php>
 </phpunit>
